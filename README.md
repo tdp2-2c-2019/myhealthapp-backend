@@ -12,7 +12,7 @@ Server + Admin of MyHealthApp
 
 ## Run locally
 
-A local server of postgresql should be running
+A local server of postgresql should be running under postgres://$USER:@localhost:5432/postgres
 
 ```bash
 npm run dev
