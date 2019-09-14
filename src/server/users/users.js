@@ -1,4 +1,4 @@
-import { UserService, UserNotFoundError } from '../services/users';
+import { UserService } from '../services/users';
 
 const router = require('express').Router();
 
