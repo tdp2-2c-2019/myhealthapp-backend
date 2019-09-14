@@ -18,3 +18,22 @@ A local server of postgresql should be running under postgres://$USER:@localhost
 npm run dev
 ```
 
+## Endpoints
+
+### Users
+
+#### `POST` /api/users
+
+Creates a user if the given DNI exists in the DB
+
+Expected body:
+
+```json
+    {
+        "dni": "99",
+        "password": "password",
+        "mail": "diego@armando.com"
+    }
+```
+
+Response: 201

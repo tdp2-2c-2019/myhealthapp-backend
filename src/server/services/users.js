@@ -17,8 +17,7 @@ export class UserService {
         }
         if (result.rowCount === 0) {
           throw new UserNotFoundError('User with this DNI does not exist');
-        }
-        if (result.rowCount === 1) {
+        } else if (result.rowCount === 1) {
           query('update users set password = $1, mail = $2 where dni = $3', [password, mail, dni], (err) => {
             if (err) {
               throw err;
