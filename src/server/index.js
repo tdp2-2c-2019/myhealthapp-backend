@@ -5,7 +5,10 @@ const app = express();
 
 app.use(express.static('dist'));
 app.use(express.json());
-app.use('/api/users', require('./users/users'));
+app.use(express.urlencoded({
+  extended: true
+}));
+app.use('/api/users', require('./users/users').default);
 
 app.get('/api/getUsername', (req, res, next) => {
   db.query('SELECT * FROM plans;', [], (err, result) => {
