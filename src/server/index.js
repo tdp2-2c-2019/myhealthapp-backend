@@ -1,5 +1,6 @@
+require('dotenv').config();
 const express = require('express');
-const db = require('./db');
+const { db } = require('./db');
 
 const app = express();
 
@@ -10,13 +11,8 @@ app.use(express.urlencoded({
 }));
 app.use('/api/users', require('./users/users').default);
 
-app.get('/api/getUsername', (req, res, next) => {
-  db.query('SELECT * FROM plans;', [], (err, result) => {
-    if (err) {
-      return next(err);
-    }
-    res.send({ username: result.rows[0].name });
-  });
+app.get('/api/plans', (req, res, next) => {
+  db.select().from('plans').then(plans => res.send(plans)).catch(err => next(err));
 });
 
 app.use((err, req, res, next) => {
