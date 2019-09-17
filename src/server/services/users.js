@@ -19,7 +19,7 @@ export class UserService {
           if (res.length === 0) {
             reject(new UserNotFoundError('User with this DNI does not exist'));
           } else {
-            resolve(true);
+            resolve('ok');
           }
         });
     });
