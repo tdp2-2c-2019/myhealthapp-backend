@@ -12,13 +12,9 @@ app.use(express.urlencoded({
   extended: true
 }));
 
-app.use('/api/users', checkToken, require('./users/users').default);
+app.use('/api/users', require('./users/users').default);
 
 app.post('/api/login', HandlerGenerator.login);
-
-app.get('/api/plans', (req, res, next) => {
-  db.select().from('plans').then(plans => res.send(plans)).catch(err => next(err));
-});
 
 app.use((err, req, res, next) => {
   if (res.headersSent) {
