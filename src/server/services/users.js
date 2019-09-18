@@ -1,14 +1,7 @@
 import { db } from '../db';
+import { UserNotFoundError } from '../errors/errors';
 
-export class UserNotFoundError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'UserNotFound';
-    this.statusCode = 404;
-  }
-}
-
-export class UserService {
+class UserService {
   static createUser(dni, password, mail) {
     return new Promise((resolve, reject) => {
       db('users').where('dni', dni).update({
@@ -25,3 +18,5 @@ export class UserService {
     });
   }
 }
+
+export default UserService;

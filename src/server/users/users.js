@@ -1,14 +1,7 @@
-import { UserService } from '../services/users';
+import UserService from '../services/users';
+import { ValidationError } from '../errors/errors';
 
 const router = require('express').Router();
-
-class ValidationError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'ValidationError';
-    this.statusCode = 400;
-  }
-}
 
 // User registers with dni, mail and password and we verify against db
 router.post('/', (req, res, next) => {
