@@ -1,5 +1,6 @@
 import { verify, sign } from 'jsonwebtoken';
 import { ValidationError } from '../errors/errors';
+import UserService from '../services/users';
 
 export const checkToken = (req, res, next) => {
   let token = req.headers['x-access-token'] || req.headers.authorization; // Express headers are auto converted to lowercase
@@ -27,18 +28,17 @@ export const checkToken = (req, res, next) => {
 
 export class HandlerGenerator {
   static login(req, res) {
-    const { username: dni } = req.body;
+    const { dni } = req.body;
     const { password } = req.body;
 
     if (!dni || !password) {
       throw new ValidationError('Missing DNI and/or password');
     }
-    // TODO: Go and fetch from DB
-    const mockedUsername = 'admin';
-    const mockedPassword = 'password';
-    const userBlocked = false;
+    const user = UserService.getUserByDniAndPassword(dni, password)
+      .then(fetchedUser => fetchedUser)
+      .catch((e) => { throw e; });
 
-    if (dni === mockedUsername && password === mockedPassword && !userBlocked) {
+    if (dni === user.dni && password === user.password && !user.blocked) {
       const token = sign({ username: dni },
         process.env.JWTSECRET,
         {
@@ -51,7 +51,7 @@ export class HandlerGenerator {
       });
     } else {
       res.status(403).json({
-        error: userBlocked ? 'Your user is blocked, please contact helpdesk' : 'Incorrect username or password'
+        error: user.blocked ? 'Your user is blocked, please contact helpdesk' : 'Incorrect username or password'
       });
     }
   }
