@@ -5,7 +5,6 @@ import CryptoService from '../utils/crypto';
 class UserService {
   static createUser(dni, password, mail) {
     return new Promise((resolve, reject) => {
-      // TODO: Use bcrypt to store passwords and retrieve them
       const hashedPassword = CryptoService.encrypt(password);
       db('users').where('dni', dni).update({
         password: hashedPassword,
@@ -22,21 +21,21 @@ class UserService {
   }
 
   static getUserByDniAndPassword(dni, password) {
-    // TODO: Use bcrypt to store passwords and retrieve them
-    db.select().from('users').where(dni)
-      .then((rows) => {
-        if (rows.length === 0) {
-          throw new UserNotFoundError('User not found');
-        } else {
-          console.log(rows[0]);
-          const passwordsMatch = CryptoService.compare(password, rows[0].password);
-          if (!passwordsMatch) {
-            throw new ValidationError('Incorrect DNI or password.');
+    return new Promise((resolve, reject) => {
+      db('users').where('dni', dni)
+        .then((rows) => {
+          if (rows.length === 0) {
+            reject(new UserNotFoundError('User not found'));
           } else {
-            return rows[0];
+            const passwordsMatch = CryptoService.compare(password, rows[0].password);
+            if (!passwordsMatch) {
+              reject(new ValidationError('Incorrect DNI or password.'));
+            } else {
+              resolve(rows[0]);
+            }
           }
-        }
-      });
+        });
+    });
   }
 }
 
