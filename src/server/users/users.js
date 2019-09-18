@@ -16,7 +16,7 @@ router.post('/', (req, res, next) => {
     throw new ValidationError('Missing DNI, mail or password');
   }
   UserService.createUser(req.body.dni, req.body.password, req.body.mail).then(() => {
-    res.status(201).send();
+    res.sendStatus(201);
   }).catch((err) => {
     res.status(err.statusCode).json({ error: err.message });
   });
