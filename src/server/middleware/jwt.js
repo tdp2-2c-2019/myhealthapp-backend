@@ -36,27 +36,22 @@ export class HandlerGenerator {
     // TODO: Go and fetch from DB
     const mockedUsername = 'admin';
     const mockedPassword = 'password';
+    const userBlocked = false;
 
-    if (dni && password) {
-      if (dni === mockedUsername && password === mockedPassword) {
-        const token = sign({ username: dni },
-          process.env.JWTSECRET,
-          {
-            expiresIn: '24h' // expires in 24 hours
-          });
+    if (dni === mockedUsername && password === mockedPassword && !userBlocked) {
+      const token = sign({ username: dni },
+        process.env.JWTSECRET,
+        {
+          expiresIn: '24h' // expires in 24 hours
+        });
         // return the JWT token for the future API calls
-        res.json({
-          message: 'Authentication successful!',
-          token
-        });
-      } else {
-        res.status(403).json({
-          error: 'Incorrect username or password'
-        });
-      }
+      res.json({
+        message: 'Authentication successful!',
+        token
+      });
     } else {
-      res.status(400).json({
-        error: 'Authentication failed! Please check the request'
+      res.status(403).json({
+        error: userBlocked ? 'Your user is blocked, please contact helpdesk' : 'Incorrect username or password'
       });
     }
   }
