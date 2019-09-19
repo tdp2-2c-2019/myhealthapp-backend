@@ -1,5 +1,5 @@
 import { db } from '../db';
-import { UserNotFoundError, ValidationError } from '../errors/errors';
+import { UserNotFoundError, AuthorizationError } from '../errors/errors';
 import CryptoService from '../utils/crypto';
 
 class UserService {
@@ -30,7 +30,7 @@ class UserService {
           } else {
             CryptoService.compare(password, rows[0].password).then((passwordsMatch) => {
               if (!passwordsMatch) {
-                reject(new ValidationError('Incorrect DNI or password.'));
+                reject(new AuthorizationError('Incorrect DNI or password.'));
               } else {
                 const user = { ...rows[0], password };
                 resolve(user);
