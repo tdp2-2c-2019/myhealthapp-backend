@@ -27,32 +27,32 @@ export const checkToken = (req, res, next) => {
 };
 
 export class HandlerGenerator {
-  static login(req, res) {
+  static login(req, res, next) {
     const { dni } = req.body;
     const { password } = req.body;
 
     if (!dni || !password) {
       throw new ValidationError('Missing DNI and/or password');
     }
-    const user = UserService.getUserByDniAndPassword(dni, password)
-      .then(fetchedUser => fetchedUser)
-      .catch((e) => { throw e; });
-
-    if (dni === user.dni && password === user.password && !user.blocked) {
-      const token = sign({ username: dni },
-        process.env.JWTSECRET,
-        {
-          expiresIn: '24h' // expires in 24 hours
-        });
-        // return the JWT token for the future API calls
-      res.json({
-        message: 'Authentication successful!',
-        token
-      });
-    } else {
-      res.status(403).json({
-        error: user.blocked ? 'Your user is blocked, please contact helpdesk' : 'Incorrect username or password'
-      });
-    }
+    UserService.getUserByDniAndPassword(dni, password)
+      .then((user) => {
+        if (dni === user.dni && password === user.password && !user.blocked) {
+          const token = sign({ username: dni },
+            process.env.JWTSECRET,
+            {
+              expiresIn: '24h' // expires in 24 hours
+            });
+            // return the JWT token for the future API calls
+          res.json({
+            message: 'Authentication successful!',
+            token
+          });
+        } else {
+          res.status(403).json({
+            error: user.blocked ? 'Your user is blocked, please contact helpdesk' : 'Incorrect username or password'
+          });
+        }
+      })
+      .catch(e => next(e));
   }
 }
