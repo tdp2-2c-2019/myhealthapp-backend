@@ -15,8 +15,10 @@
   "author": "tdp2-2c-2019",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "bcrypt": "^3.0.6",
     "dotenv": "^8.1.0",
     "express": "^4.16.3",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.19.4",
     "pg": "^7.12.1",
     "react": "^16.5.2",

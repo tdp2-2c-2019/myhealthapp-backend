@@ -1,3 +1,5 @@
+import { HandlerGenerator, checkToken } from './middleware/jwt';
+
 require('dotenv').config();
 const express = require('express');
 const { db } = require('./db');
@@ -9,11 +11,10 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
+
 app.use('/api/users', require('./users/users').default);
 
-app.get('/api/plans', (req, res, next) => {
-  db.select().from('plans').then(plans => res.send(plans)).catch(err => next(err));
-});
+app.post('/api/login', HandlerGenerator.login);
 
 app.use((err, req, res, next) => {
   if (res.headersSent) {

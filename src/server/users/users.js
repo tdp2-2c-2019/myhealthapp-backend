@@ -1,17 +1,12 @@
-import { UserService } from '../services/users';
+import UserService from '../services/users';
+import { ValidationError } from '../errors/errors';
+import { checkToken } from '../middleware/jwt';
+
 
 const router = require('express').Router();
 
-class ValidationError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'ValidationError';
-    this.statusCode = 400;
-  }
-}
-
 // User registers with dni, mail and password and we verify against db
-router.post('/', (req, res, next) => {
+router.post('/', checkToken, (req, res, next) => {
   if (!req.body.dni || !req.body.mail || !req.body.password) {
     throw new ValidationError('Missing DNI, mail or password');
   }
