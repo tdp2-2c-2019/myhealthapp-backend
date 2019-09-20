@@ -12,6 +12,8 @@ app.use(express.urlencoded({
   extended: true
 }));
 
+app.use('/api/health-services', require('./health/health_services').default);
+
 app.use('/api/users', require('./users/users').default);
 
 app.post('/api/login', HandlerGenerator.login);
