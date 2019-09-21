@@ -38,11 +38,11 @@ class UserService {
         .then((rows) => {
           if (rows.length === 0) {
             // For security reasons we don't inform that the user was not found.
-            reject(new AuthorizationError('DNI o contraseña incorrextos'));
+            reject(new AuthorizationError('DNI o contraseña incorrectos'));
           } else {
             CryptoService.compare(password, rows[0].password).then((passwordsMatch) => {
               if (!passwordsMatch) {
-                reject(new AuthorizationError('DNI o contraseña incorrextos'));
+                reject(new AuthorizationError('DNI o contraseña incorrectos'));
               } else if (rows[0].blocked) {
                 reject(new AuthorizationError('Su usuario esta bloqueado, contacte a mesa de ayuda'));
               } else {
