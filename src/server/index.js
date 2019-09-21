@@ -1,7 +1,6 @@
-import { HandlerGenerator } from './middleware/jwt';
-
 require('dotenv').config();
 const express = require('express');
+const HandlerGenerator = require('./middleware/jwt');
 
 const app = express();
 
