@@ -4,8 +4,8 @@
   "description": "Backend for MyHealthApp, with admin",
   "main": "src/server/index.js",
   "scripts": {
-    "build": "webpack --mode production && rm -rf build/* && babel -d ./build ./src/server",
-    "start": "npm run build && node ./build/index.js",
+    "build": "webpack --mode production && rm -rf build/* && babel -d ./dist ./src/server",
+    "start": "npm run build && node ./dist/index.js",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "server": "nodemon --exec babel-node src/server/index.js",
     "debug": "nodemon --inspect --exec babel-node src/server/index.js",
