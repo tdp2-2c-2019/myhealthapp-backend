@@ -1,8 +1,7 @@
-import { HandlerGenerator, checkToken } from './middleware/jwt';
+import { HandlerGenerator } from './middleware/jwt';
 
 require('dotenv').config();
 const express = require('express');
-const { db } = require('./db');
 
 const app = express();
 
