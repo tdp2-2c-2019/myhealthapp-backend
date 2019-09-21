@@ -8,7 +8,7 @@ class UserService {
       CryptoService.encrypt(password).then((hashedPassword) => {
         db.select().from('users').where('dni', dni).then((rows) => {
           if (rows.length > 0 && rows[0].password !== null) {
-            reject(new ResourceAlreadyExistsError('User with this DNI already exists'));
+            reject(new ResourceAlreadyExistsError('El usuario con este DNI ya existe'));
           } else {
             db('users').where('dni', dni).update({
               password: hashedPassword,
@@ -17,7 +17,7 @@ class UserService {
               .returning('dni')
               .then((res) => {
                 if (res.length === 0) {
-                  reject(new NotFoundError('User with this DNI does not exist'));
+                  reject(new NotFoundError('El usuario con este DNI no existe'));
                 } else {
                   resolve();
                 }
@@ -35,13 +35,13 @@ class UserService {
         .then((rows) => {
           if (rows.length === 0) {
             // For security reasons we don't inform that the user was not found.
-            reject(new AuthorizationError('Incorrect DNI or password.'));
+            reject(new AuthorizationError('DNI o contraseña incorrextos'));
           } else {
             CryptoService.compare(password, rows[0].password).then((passwordsMatch) => {
               if (!passwordsMatch) {
-                reject(new AuthorizationError('Incorrect DNI or password.'));
+                reject(new AuthorizationError('DNI o contraseña incorrextos'));
               } else if (rows[0].blocked) {
-                reject(new AuthorizationError('Your user is blocked, please contact helpdesk'));
+                reject(new AuthorizationError('Su usuario esta bloqueado, contacte a mesa de ayuda'));
               } else {
                 resolve();
               }

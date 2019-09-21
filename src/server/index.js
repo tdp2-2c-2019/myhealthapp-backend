@@ -21,7 +21,7 @@ app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
   }
-  res.status(err.statusCode || 500).send({ error: err.message || 'Internal server error' });
+  res.status(err.statusCode || 500).send({ error: err.message || 'Error interno' });
 });
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
