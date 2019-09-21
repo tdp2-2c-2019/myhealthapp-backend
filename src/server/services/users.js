@@ -1,5 +1,5 @@
 import { db } from '../db';
-import { UserNotFoundError, AuthorizationError } from '../errors/errors';
+import { NotFoundError, AuthorizationError } from '../errors/errors';
 import CryptoService from '../utils/crypto';
 
 class UserService {
@@ -12,7 +12,7 @@ class UserService {
         }).returning('dni')
           .then((res) => {
             if (res.length === 0) {
-              reject(new UserNotFoundError('User with this DNI does not exist'));
+              reject(new NotFoundError('User with this DNI does not exist'));
             } else {
               resolve();
             }

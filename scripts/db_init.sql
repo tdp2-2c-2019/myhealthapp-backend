@@ -29,8 +29,7 @@ CREATE TABLE IF NOT EXISTS specializations (
 CREATE TABLE IF NOT EXISTS doctors (
     id INTEGER NOT NULL PRIMARY KEY,
     minimum_plan INTEGER REFERENCES plans(plan),
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
+    name VARCHAR(255),
     mail VARCHAR(255),
     lat FLOAT,
     lon FLOAT
@@ -48,3 +47,7 @@ INSERT INTO users("dni", "plan", "first_name", "last_name", "password", "blocked
 INSERT INTO hospitals("id", "minimum_plan", "name", "lat", "lon") VALUES
 (1, 1, 'hospital1', -33.0, -43.3),
 (2, 2, 'hospital2', -37.0, -53.3);
+
+INSERT INTO doctors("id", "minimum_plan", "name", "mail", "lat", "lon") VALUES
+(1, 1, 'Jorge Perez', 'jperez@gmail.com', -33.0, -43.3),
+(2, 2, 'Claudia Rodriguez', 'crodriguez@gmail.com', -37.0, -53.3);
