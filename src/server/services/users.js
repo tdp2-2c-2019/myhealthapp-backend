@@ -3,7 +3,7 @@ import { NotFoundError, AuthorizationError, ResourceAlreadyExistsError } from '.
 import CryptoService from '../utils/crypto';
 
 class UserService {
-  static createUser(dni, password, mail) {
+  static createUser(dni, password, mail, first_name, last_name, plan) {
     return new Promise((resolve, reject) => {
       CryptoService.encrypt(password).then((hashedPassword) => {
         db.select().from('users').where('dni', dni).then((rows) => {
@@ -12,7 +12,10 @@ class UserService {
           } else {
             db('users').where('dni', dni).update({
               password: hashedPassword,
-              mail
+              mail,
+              first_name,
+              last_name,
+              plan
             })
               .returning('dni')
               .then((res) => {
