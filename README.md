@@ -78,7 +78,7 @@ Expected body:
 Response status: 201
 
 ### Health Services
-### `GET` /api/health-services
+#### `GET` /api/health-services
 Returns all hospitals and doctors.
 
 Auth: Yes
@@ -104,7 +104,7 @@ Response body 200:
 ]
 ```
 
-### `GET` /api/health-services/hospitals
+#### `GET` /api/health-services/hospitals
 Returns all hospitals.
 
 Auth: Yes
@@ -130,7 +130,7 @@ Response body 200:
 ]
 ```
 
-### `GET` /api/health-services/doctors
+#### `GET` /api/health-services/doctors
 Returns all doctors.
 
 Auth: Yes
@@ -156,7 +156,7 @@ Response body 200:
 ]
 ```
 
-### `GET` /api/health-services/hospitals/:id
+#### `GET` /api/health-services/hospitals/:id
 Returns hospital with selected ID.
 
 Response status: 200, 404
@@ -181,7 +181,7 @@ Response body 404:
 }
 ```
 
-### `GET` /api/health-services/doctors/:id
+#### `GET` /api/health-services/doctors/:id
 Returns doctor with selected ID.
 
 Response status: 200, 404
