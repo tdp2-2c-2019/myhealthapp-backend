@@ -13,7 +13,7 @@ export const checkToken = (req, res, next) => {
     verify(token, process.env.JWTSECRET, (err, decoded) => {
       if (err) {
         return res.status(401).json({
-          error: 'Token is not valid'
+          error: 'El token no es valido'
         });
       }
       req.decoded = decoded;
@@ -21,7 +21,7 @@ export const checkToken = (req, res, next) => {
     });
   } else {
     return res.status(400).json({
-      error: 'Auth token is not supplied'
+      error: 'No se pasó el token'
     });
   }
 };
@@ -31,7 +31,7 @@ export class HandlerGenerator {
     const { dni, password } = req.body;
 
     if (!dni || !password) {
-      throw new ValidationError('Missing DNI and/or password');
+      throw new ValidationError('DNI y/o passwords faltantes');
     }
     UserService.checkCredentials(dni, password)
       .then(() => {
@@ -42,7 +42,7 @@ export class HandlerGenerator {
           });
         // return the JWT token for the future API calls
         res.json({
-          message: 'Authentication successful!',
+          message: 'Autenticación exitosa',
           token
         });
       })

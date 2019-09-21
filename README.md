@@ -71,7 +71,10 @@ Expected body:
     {
         "dni": "99",
         "password": "password",
-        "mail": "diego@armando.com"
+        "mail": "diego@armando.com",
+        "first_name": "Diego",
+        "last_name": "Armando",
+        "plan": "1"
     }
 ```
 
