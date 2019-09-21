@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const HandlerGenerator = require('./middleware/jwt');
+const { HandlerGenerator } = require('./middleware/jwt');
 
 const app = express();
 
