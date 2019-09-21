@@ -20,3 +20,11 @@ export class NotFoundError extends Error {
     this.statusCode = 404;
   }
 }
+
+export class ResourceAlreadyExistsError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ResourceAlreadyExistsError';
+    this.statusCode = 409;
+  }
+}
