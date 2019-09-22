@@ -5,27 +5,41 @@ const router = require('express').Router();
 
 const maxDistance = 0.5;
 
-router.get('/hospitals', (req, res, next) => {
+const getFilters = (query) => {
   const {
     name, telephone, distance
-  } = req.query;
+  } = query;
   const origin = {
-    lat: Number(req.query.originLat),
-    lon: Number(req.query.originLon)
+    lat: Number(query.originLat),
+    lon: Number(query.originLon)
   };
-  HealthService.getHospitals().filter((hospital) => {
-    const destination = {
-      lat: Number(hospital.lat),
-      lon: Number(hospital.lon)
-    };
-    const nameFilter = !name || (name && hospital.name.localeCompare(name) === 0);
-    const telephoneFilter = !telephone || (telephone
-      && hospital.telephone.localeCompare(telephone) === 0);
-    const distanceFilter = (!distance && calculateDistance(origin, destination) < maxDistance)
-      || (distance && calculateDistance(origin, destination) < distance);
-    return nameFilter && telephoneFilter && distanceFilter;
-  })
-    .then(hospitals => res.status(200).send(hospitals)).catch(err => next(err));
+  return {
+    name, telephone, distance, origin
+  };
+};
+
+const filterResults = (element, filters) => {
+  const {
+    name, telephone, distance, origin
+  } = filters;
+  const destination = {
+    lat: Number(element.lat),
+    lon: Number(element.lon)
+  };
+  const nameFilter = !name || (name && element.name.localeCompare(name) === 0);
+  const telephoneFilter = !telephone || (telephone
+    && element.telephone.localeCompare(telephone) === 0);
+  const distanceFilter = (!distance && calculateDistance(origin, destination) < maxDistance)
+    || (distance && calculateDistance(origin, destination) < distance);
+  return nameFilter && telephoneFilter && distanceFilter;
+};
+
+router.get('/hospitals', (req, res, next) => {
+  const filters = getFilters(req.query);
+  HealthService.getHospitals().then((hospitals) => {
+    const filteredHospitals = hospitals.filter(hospital => filterResults(hospital, filters));
+    res.status(200).send(filteredHospitals);
+  }).catch(err => next(err));
 });
 
 router.get('/hospitals/:id', (req, res, next) => {
@@ -39,25 +53,11 @@ router.get('/doctors/:id', (req, res, next) => {
 });
 
 router.get('/doctors', (req, res, next) => {
-  const {
-    name, telephone, distance
-  } = req.query;
-  const origin = {
-    lat: Number(req.query.originLat),
-    lon: Number(req.query.originLon)
-  };
-  HealthService.getDoctors().filter((doctor) => {
-    const destination = {
-      lat: Number(doctor.lat),
-      lon: Number(doctor.lon)
-    };
-    const nameFilter = !name || (name && doctor.name.localeCompare(name) === 0);
-    const telephoneFilter = !telephone || (telephone
-      && doctor.telephone.localeCompare(telephone) === 0);
-    const distanceFilter = (!distance && calculateDistance(origin, destination) < maxDistance)
-      || (distance && calculateDistance(origin, destination) < distance);
-    return nameFilter && telephoneFilter && distanceFilter;
-  }).then(doctors => res.status(200).send(doctors)).catch(err => next(err));
+  const filters = getFilters(req.query);
+  HealthService.getDoctors().then((doctors) => {
+    const filteredDoctors = doctors.filter(doctor => filterResults(doctor, filters));
+    res.status(200).send(filteredDoctors);
+  }).catch(err => next(err));
 });
 
 router.get('/', (req, res, next) => {
