@@ -3,30 +3,31 @@ import { NotFoundError, AuthorizationError, ResourceAlreadyExistsError } from '.
 import CryptoService from '../utils/crypto';
 
 class UserService {
-  static createUser(dni, password, mail, first_name, last_name, plan) {
+  static createUser(dni, password, mail, firstName, lastName, plan) {
     return new Promise((resolve, reject) => {
       CryptoService.encrypt(password).then((hashedPassword) => {
-        db.select().from('users').where('dni', dni).then((rows) => {
-          if (rows.length > 0 && rows[0].password !== null) {
-            reject(new ResourceAlreadyExistsError('El usuario con este DNI ya existe'));
-          } else {
-            db('users').where('dni', dni).update({
-              password: hashedPassword,
-              mail,
-              first_name,
-              last_name,
-              plan
-            })
-              .returning('dni')
-              .then((res) => {
-                if (res.length === 0) {
-                  reject(new NotFoundError('El usuario con este DNI no existe'));
-                } else {
-                  resolve();
-                }
-              });
-          }
-        })
+        db.select().from('users').where({ dni }).whereNotNull('password')
+          .then((rows) => {
+            if (rows.length > 0 && rows[0].password !== null) {
+              reject(new ResourceAlreadyExistsError('El usuario con este DNI ya existe'));
+            } else {
+              db('users').where('dni', dni).update({
+                password: hashedPassword,
+                mail,
+                firstName,
+                lastName,
+                plan
+              })
+                .returning('dni')
+                .then((res) => {
+                  if (res.length === 0) {
+                    reject(new NotFoundError('El usuario con este DNI no existe'));
+                  } else {
+                    resolve();
+                  }
+                });
+            }
+          })
           .catch(e => console.error(e));
       });
     });
