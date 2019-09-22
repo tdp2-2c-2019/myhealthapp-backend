@@ -8,7 +8,7 @@ class UserService {
       CryptoService.encrypt(password).then((hashedPassword) => {
         db.select().from('users').where({ dni }).whereNotNull('password')
           .then((rows) => {
-            if (rows.length > 0 && rows[0].password !== null) {
+            if (rows.length > 0) {
               reject(new ResourceAlreadyExistsError('El usuario con este DNI ya existe'));
             } else {
               db('users').where('dni', dni).update({
