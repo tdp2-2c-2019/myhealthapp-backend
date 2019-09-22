@@ -14,8 +14,8 @@ class UserService {
               db('users').where('dni', dni).update({
                 password: hashedPassword,
                 mail,
-                firstName,
-                lastName,
+                first_name: firstName,
+                last_name: lastName,
                 plan
               })
                 .returning('dni')
