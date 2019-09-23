@@ -1,10 +1,45 @@
 import HealthService from '../services/health_services';
+import calculateDistance from '../utils/geodistance';
 
 const router = require('express').Router();
 
+const maxDistance = 0.5;
+
+const getFilters = (query) => {
+  const {
+    name, telephone, distance
+  } = query;
+  const origin = {
+    lat: Number(query.originLat),
+    lon: Number(query.originLon)
+  };
+  return {
+    name, telephone, distance, origin
+  };
+};
+
+const filterResults = (element, filters) => {
+  const {
+    name, telephone, distance, origin
+  } = filters;
+  const destination = {
+    lat: Number(element.lat),
+    lon: Number(element.lon)
+  };
+  const nameFilter = !name || (name && element.name.localeCompare(name) === 0);
+  const telephoneFilter = !telephone || (telephone
+    && element.telephone.localeCompare(telephone) === 0);
+  const distanceFilter = (!distance && calculateDistance(origin, destination) < maxDistance)
+    || (distance && calculateDistance(origin, destination) < distance);
+  return nameFilter && telephoneFilter && distanceFilter;
+};
+
 router.get('/hospitals', (req, res, next) => {
-  HealthService.getHospitals()
-    .then(hospitals => res.status(200).send(hospitals)).catch(err => next(err));
+  const filters = getFilters(req.query);
+  HealthService.getHospitals().then((hospitals) => {
+    const filteredHospitals = hospitals.filter(hospital => filterResults(hospital, filters));
+    res.status(200).send(filteredHospitals);
+  }).catch(err => next(err));
 });
 
 router.get('/hospitals/:id', (req, res, next) => {
@@ -18,7 +53,11 @@ router.get('/doctors/:id', (req, res, next) => {
 });
 
 router.get('/doctors', (req, res, next) => {
-  HealthService.getDoctors().then(doctors => res.status(200).send(doctors)).catch(err => next(err));
+  const filters = getFilters(req.query);
+  HealthService.getDoctors().then((doctors) => {
+    const filteredDoctors = doctors.filter(doctor => filterResults(doctor, filters));
+    res.status(200).send(filteredDoctors);
+  }).catch(err => next(err));
 });
 
 router.get('/', (req, res, next) => {
