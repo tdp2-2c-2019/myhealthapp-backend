@@ -9,8 +9,8 @@ services:
 env:
   - PGUSER=test PGPASSWORD=test PGDATABASE=test
 before_script:
-  - psql -c  'create database test;' -U postgres
-  - psql -c  'create user test with password 'test' createdb;' -U postgres
+  - psql -c 'CREATE ROLE test SUPERUSER LOGIN CREATEDB;' -U postgres
+  - psql -c 'create database test;' -U postgres
 
 script:
   - npm run build
