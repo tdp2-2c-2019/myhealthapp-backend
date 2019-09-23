@@ -3,9 +3,20 @@ language: node_js
 node_js:
   - 10
 
+addons:
+  postgresql: "11"
+
+env:
+  - PGUSER=test_user
+  - PGPASSWORD=test_password
+  - PGDATABASE=test
+before_script:
+  - psql -c  'create user test_user with password 'test_password' createdb;' -U postgres
+  - psql -c  'create database test;' -U test_user
+
 script:
   - npm run build
-  - npm run test
+  - npm run test -- --forceExit
 
 branches:
   only:
