@@ -10,7 +10,7 @@
     "server": "nodemon --exec babel-node src/server/index.js",
     "debug": "nodemon --inspect --exec babel-node src/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "jest --passWithNoTests"
+    "test": "jest"
   },
   "author": "tdp2-2c-2019",
   "dependencies": {
