@@ -1,3 +1,4 @@
+require('dotenv').config();
 // Heroku sets postgresql's connection info under DATABASE_URL env var
 const db = require('knex')(
   {
