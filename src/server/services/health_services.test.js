@@ -14,9 +14,9 @@ describe('Health Services', () => {
       }, {
         id: 2, lat: -37, lon: -53.3, minimum_plan: 2, name: 'hospital2'
       }, {
-        id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'Jorge Perez'
+        id: 1, lat: -33, lon: -43.3, mail: 'jperez@gmail.com', minimum_plan: 1, name: 'Jorge Perez'
       }, {
-        id: 2, lat: -37, lon: -53.3, minimum_plan: 2, name: 'Claudia Rodriguez'
+        id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez'
       }
     ];
     return expect(HealthServices.getHealthServices()).resolves.toStrictEqual(expectedServices);
@@ -35,9 +35,9 @@ describe('Health Services', () => {
   test('returns all doctors', () => {
     const expectedDoctors = [
       {
-        id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'Jorge Perez'
+        id: 1, lat: -33, lon: -43.3, mail: 'jperez@gmail.com', minimum_plan: 1, name: 'Jorge Perez'
       }, {
-        id: 2, lat: -37, lon: -53.3, minimum_plan: 2, name: 'Claudia Rodriguez'
+        id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez'
       }
     ];
     return expect(HealthServices.getDoctors()).resolves.toStrictEqual(expectedDoctors);

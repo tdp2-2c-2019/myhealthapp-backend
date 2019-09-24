@@ -4,7 +4,7 @@ import { NotFoundError } from '../errors/errors';
 class HealthService {
   static getHealthServices() {
     const hospitals = Promise.resolve(db('hospitals').select());
-    const doctors = Promise.resolve(db('doctors').select('id', 'minimum_plan', 'name', 'lat', 'lon'));
+    const doctors = Promise.resolve(db('doctors').select());
     return Promise.all([hospitals, doctors]).then(res => res[0].concat(res[1]));
   }
 
@@ -13,7 +13,7 @@ class HealthService {
   }
 
   static getDoctors() {
-    return db('doctors').select('id', 'minimum_plan', 'name', 'lat', 'lon');
+    return db('doctors').select();
   }
 
   static getHospitalByID(id) {
