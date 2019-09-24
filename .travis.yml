@@ -11,7 +11,8 @@ env:
 
 before_script:
   - psql -c "CREATE ROLE test WITH PASSWORD 'test' SUPERUSER LOGIN CREATEDB;" -U postgres -d postgres
-  - psql -c 'create database test;' -U postgres -d postgres
+  - psql -c 'CREATE DATABASE test;' -U postgres -d postgres
+  - psql -U test -d test -a -f ./scripts/db_init.sql
 
 script:
   - npm run build
