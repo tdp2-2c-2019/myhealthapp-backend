@@ -6,22 +6,23 @@ class UserService {
   static createUser(dni, password, mail, firstName, lastName, plan) {
     return new Promise((resolve, reject) => {
       CryptoService.encrypt(password).then((hashedPassword) => {
-        db.select().from('users').where({ dni }).whereNotNull('password')
+        db.select().from('users').where('dni', dni).whereNotNull('password')
           .then((rows) => {
             if (rows.length > 0) {
               reject(new ResourceAlreadyExistsError('El usuario con este DNI ya existe'));
             } else {
-              db('users').where('dni', dni).update({
+              db('users').where({ dni, plan }).update({
                 password: hashedPassword,
                 mail,
                 first_name: firstName,
-                last_name: lastName,
-                plan
+                last_name: lastName
               })
-                .returning('dni')
+                .returning(['dni', 'blocked'])
                 .then((res) => {
                   if (res.length === 0) {
-                    reject(new NotFoundError('El usuario con este DNI no existe'));
+                    reject(new NotFoundError('El usuario con este DNI o plan no existe'));
+                  } else if (res[0].blocked) {
+                    reject(new AuthorizationError('Su usuario esta bloqueado, contacte a mesa de ayuda'));
                   } else {
                     resolve();
                   }
