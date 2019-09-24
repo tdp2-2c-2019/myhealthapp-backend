@@ -3,9 +3,20 @@ language: node_js
 node_js:
   - 10
 
+services:
+  - postgresql
+
+env:
+  - PGUSER=test PGPASSWORD=test PGDATABASE=test
+
+before_script:
+  - psql -c "CREATE ROLE test WITH PASSWORD 'test' SUPERUSER LOGIN CREATEDB;" -U postgres -d postgres
+  - psql -c 'CREATE DATABASE test;' -U postgres -d postgres
+  - psql -U test -d test -a -f ./scripts/db_init.sql
+
 script:
   - npm run build
-  - npm run test
+  - npm run test -- --forceExit
 
 branches:
   only:
