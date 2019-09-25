@@ -11,8 +11,8 @@ router.post('/', (req, res, next) => {
   UserService.createUser(req.body.dni,
     req.body.password,
     req.body.mail,
-    req.body.first_name,
-    req.body.last_name,
+    req.body.firstName,
+    req.body.lastName,
     req.body.plan).then(() => {
     res.sendStatus(201);
   }).catch((err) => {
