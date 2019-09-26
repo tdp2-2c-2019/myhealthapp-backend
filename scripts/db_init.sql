@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS hospitals (
     id INTEGER NOT NULL PRIMARY KEY,
     minimum_plan INTEGER REFERENCES plans(plan),
     name VARCHAR(255),
+    mail VARCHAR(255),
+    telephone INTEGER,
     lat FLOAT,
     lon FLOAT
 );
@@ -26,11 +28,17 @@ CREATE TABLE IF NOT EXISTS specializations (
     name VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS languages (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name VARCHAR(255)
+);
+
 CREATE TABLE IF NOT EXISTS doctors (
     id INTEGER NOT NULL PRIMARY KEY,
     minimum_plan INTEGER REFERENCES plans(plan),
     name VARCHAR(255),
     mail VARCHAR(255),
+    telephone INTEGER,
     lat FLOAT,
     lon FLOAT
 );
@@ -41,13 +49,13 @@ INSERT INTO plans("plan", "plan_name") VALUES
 (3, 'Plan 3');
 
 INSERT INTO users("dni", "plan", "first_name", "last_name", "password", "blocked", "mail") VALUES
-(1, 1, 'Diego', 'Armando', 'password', false, 'diego@mail.com'),
-(2, 2, 'Claudio', 'Paul', 'password', false, 'claudio@paul.com');
+(1, 1, 'Diego', 'Armando', NULL, false, 'diego@mail.com'),
+(2, 2, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com');
 
-INSERT INTO hospitals("id", "minimum_plan", "name", "lat", "lon") VALUES
-(1, 1, 'hospital1', -33.0, -43.3),
-(2, 2, 'hospital2', -37.0, -53.3);
+INSERT INTO hospitals("id", "minimum_plan", "name", "mail", "telephone", "lat", "lon") VALUES
+(1, 1, 'hospital1', 'hospital1@gmail.com', 43456796, -33.0, -43.3),
+(2, 2, 'hospital2', 'hospital2@gmail.com', 534678, -37.0, -53.3);
 
-INSERT INTO doctors("id", "minimum_plan", "name", "mail", "lat", "lon") VALUES
-(1, 1, 'Jorge Perez', 'jperez@gmail.com', -33.0, -43.3),
-(2, 2, 'Claudia Rodriguez', 'crodriguez@gmail.com', -37.0, -53.3);
+INSERT INTO doctors("id", "minimum_plan", "name", "mail", "telephone", "lat", "lon") VALUES
+(1, 1, 'Jorge Perez', 'jperez@gmail.com', 47341234, -33.0, -43.3),
+(2, 2, 'Claudia Rodriguez', 'crodriguez@gmail.com', 528561, -37.0, -53.3);
