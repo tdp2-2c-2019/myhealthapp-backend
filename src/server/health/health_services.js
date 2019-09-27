@@ -5,39 +5,38 @@ const router = require('express').Router();
 
 const maxDistance = 0.5;
 
-const getFilters = (query) => {
-  const {
-    name, telephone, distance
-  } = query;
+const getDistanceFilters = (query) => {
+  const { distance } = query;
   const origin = {
     lat: Number(query.originLat),
     lon: Number(query.originLon)
   };
-  return {
-    name, telephone, distance, origin
-  };
+  return { distance, origin };
 };
 
-const filterResults = (element, filters) => {
+const getFilters = (query) => {
+  const filters = { ...query };
+  Object.keys(filters).forEach(key => filters[key] === undefined && delete filters[key]);
+  return filters;
+};
+
+const filterByDistance = (element, filters) => {
   const {
-    name, telephone, distance, origin
+    distance, origin
   } = filters;
   const destination = {
     lat: Number(element.lat),
     lon: Number(element.lon)
   };
-  const nameFilter = !name || (name && element.name.localeCompare(name) === 0);
-  const telephoneFilter = !telephone || (telephone
-    && element.telephone.localeCompare(telephone) === 0);
-  const distanceFilter = (!distance && calculateDistance(origin, destination) < maxDistance)
-    || (distance && calculateDistance(origin, destination) < distance);
-  return nameFilter && telephoneFilter && distanceFilter;
+  return (!distance && calculateDistance(origin, destination) < maxDistance)
+  || (distance && calculateDistance(origin, destination) < distance);
 };
 
 router.get('/hospitals', (req, res, next) => {
   const filters = getFilters(req.query);
-  HealthService.getHospitals().then((hospitals) => {
-    const filteredHospitals = hospitals.filter(hospital => filterResults(hospital, filters));
+  HealthService.getHospitals(filters).then((hospitals) => {
+    const filteredHospitals = hospitals
+      .filter(hospital => filterByDistance(hospital, getDistanceFilters(req.query)));
     res.status(200).send(filteredHospitals);
   }).catch(err => next(err));
 });
@@ -54,10 +53,11 @@ router.get('/doctors/:id', (req, res, next) => {
 
 router.get('/doctors', (req, res, next) => {
   const filters = getFilters(req.query);
-  HealthService.getDoctors().then((doctors) => {
-    const filteredDoctors = doctors.filter(doctor => filterResults(doctor, filters));
-    res.status(200).send(filteredDoctors);
-  }).catch(err => next(err));
+  HealthService.getDoctors(filters)
+    .then((doctors) => {
+      const filteredDoctors = doctors.filter(doctor => filterByDistance(doctor, getDistanceFilters(req.query)));
+      res.status(200).send(filteredDoctors);
+    }).catch(err => next(err));
 });
 
 router.get('/', (req, res, next) => {

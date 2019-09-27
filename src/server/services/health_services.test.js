@@ -32,6 +32,22 @@ describe('Health Services', () => {
     return expect(HealthServices.getHospitals()).resolves.toStrictEqual(expectedHospitals);
   });
 
+  test('returns hospitals filtered by name', () => {
+    const expectedHospitals = [
+      {
+        id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
+      }];
+    return expect(HealthServices.getHospitals({ name: 'hospital1' })).resolves.toStrictEqual(expectedHospitals);
+  });
+
+  test('returns hospitals filtered by specialization', () => {
+    const expectedHospitals = [
+      {
+        id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
+      }];
+    return expect(HealthServices.getHospitals({ specializations: ['Dermatologia'] })).resolves.toStrictEqual(expectedHospitals);
+  });
+
   test('returns all doctors', () => {
     const expectedDoctors = [
       {
