@@ -43,6 +43,24 @@ describe('Health Services', () => {
     return expect(HealthServices.getDoctors()).resolves.toStrictEqual(expectedDoctors);
   });
 
+  test('returns doctors filtered by name', () => {
+    const expectedDoctors = [
+      {
+        id: 1, lat: -33, lon: -43.3, mail: 'jperez@gmail.com', minimum_plan: 1, name: 'Jorge Perez', telephone: 47341234
+      }
+    ];
+    return expect(HealthServices.getDoctors({ name: 'Jorge Perez' })).resolves.toStrictEqual(expectedDoctors);
+  });
+
+  test('returns doctors filtered by specialization', () => {
+    const expectedDoctors = [
+      {
+        id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez', telephone: 528561
+      }
+    ];
+    return expect(HealthServices.getDoctors({ specializations: ['Odontologia'] })).resolves.toStrictEqual(expectedDoctors);
+  });
+
   test('returns hopsital with selected ID', () => {
     const expectedHospital = {
       id: 1,

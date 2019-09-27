@@ -12,8 +12,16 @@ class HealthService {
     return db('hospitals').select();
   }
 
-  static getDoctors() {
-    return db('doctors').select();
+  static getDoctors(filters = {}) {
+    const { specializations, ...normalFilters } = filters;
+    if (specializations !== undefined) {
+      return db('doctors').select('doctors.id', 'doctors.minimum_plan', 'doctors.name', 'doctors.mail', 'doctors.telephone', 'doctors.lat', 'doctors.lon').distinct()
+        .where(normalFilters)
+        .innerJoin('doctors_specializations', 'doctors.id', 'doctors_specializations.doctor_id')
+        .innerJoin('specializations', 'specializations.id', 'doctors_specializations.specialization_id')
+        .whereIn('specializations.name', specializations);
+    }
+    return db('doctors').select().where(normalFilters);
   }
 
   static getHospitalByID(id) {
