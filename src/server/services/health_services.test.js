@@ -1,13 +1,14 @@
 import db from '../db';
 import HealthServices from './health_services';
 import { NotFoundError } from '../errors/errors';
+import 'babel-polyfill';
 
 describe('Health Services', () => {
   afterAll(() => {
     db.destroy().then();
   });
 
-  test('returns all health services', () => {
+  test('returns all health services', async () => {
     const expectedServices = [
       {
         id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
@@ -19,7 +20,10 @@ describe('Health Services', () => {
         id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez', telephone: 528561
       }
     ];
-    return expect(HealthServices.getHealthServices()).resolves.toStrictEqual(expectedServices);
+    const services = await HealthServices.getHealthServices();
+    expect(services).toHaveLength(expectedServices.length);
+    expect(services).toEqual(expect.arrayContaining(expectedServices));
+    expect(expectedServices).toEqual(expect.arrayContaining(services));
   });
 
   test('returns all hospitals', () => {
@@ -48,7 +52,7 @@ describe('Health Services', () => {
     return expect(HealthServices.getHospitals({ specializations: ['Dermatologia'] })).resolves.toStrictEqual(expectedHospitals);
   });
 
-  test('returns all doctors', () => {
+  test('returns all doctors', async () => {
     const expectedDoctors = [
       {
         id: 1, lat: -33, lon: -43.3, mail: 'jperez@gmail.com', minimum_plan: 1, name: 'Jorge Perez', telephone: 47341234
@@ -56,7 +60,10 @@ describe('Health Services', () => {
         id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez', telephone: 528561
       }
     ];
-    return expect(HealthServices.getDoctors()).resolves.toStrictEqual(expectedDoctors);
+    const doctors = await HealthServices.getDoctors();
+    expect(doctors).toHaveLength(expectedDoctors.length);
+    expect(doctors).toEqual(expect.arrayContaining(expectedDoctors));
+    expect(expectedDoctors).toEqual(expect.arrayContaining(doctors));
   });
 
   test('returns doctors filtered by name', () => {
