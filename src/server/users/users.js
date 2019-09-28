@@ -1,4 +1,4 @@
-import randomBytes from 'crypto';
+import { randomBytes } from 'crypto';
 import UserService from '../services/users';
 import { ValidationError } from '../errors/errors';
 import sendAccountRecoveryEmail from '../utils/mailer';
@@ -23,11 +23,12 @@ router.post('/', (req, res, next) => {
 });
 
 router.post('/account/recover', (req, res, next) => {
-  if (!req.query.mail) {
+  const { mail } = req.body;
+  if (!mail) {
     throw new ValidationError('Ingrese un mail');
   }
-  UserService.getUserByMail(req.query.mail).then((user) => {
-    const token = randomBytes(5, (err, buffer) => buffer.toString());
+  UserService.getUserByMail(mail).then((user) => {
+    const token = randomBytes(3).toString('hex');
     const userWithToken = { ...user, token };
     UserService.updateUser(userWithToken).then(() => {
       const err = sendAccountRecoveryEmail(userWithToken);

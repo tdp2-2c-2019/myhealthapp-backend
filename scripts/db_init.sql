@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(255),
     password VARCHAR(255),
     blocked BOOLEAN,
-    mail VARCHAR(255)
+    mail VARCHAR(255),
+    token VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS hospitals (
@@ -48,9 +49,9 @@ INSERT INTO plans("plan", "plan_name") VALUES
 (2, 'Plan 2'), 
 (3, 'Plan 3');
 
-INSERT INTO users("dni", "plan", "first_name", "last_name", "password", "blocked", "mail") VALUES
-(1, 1, 'Diego', 'Armando', NULL, false, 'diego@mail.com'),
-(2, 2, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com');
+INSERT INTO users("dni", "plan", "first_name", "last_name", "password", "blocked", "mail", "token") VALUES
+(1, 1, 'Diego', 'Armando', NULL, false, 'diego@mail.com', ''),
+(2, 2, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', '');
 
 INSERT INTO hospitals("id", "minimum_plan", "name", "mail", "telephone", "lat", "lon") VALUES
 (1, 1, 'hospital1', 'hospital1@gmail.com', 43456796, -33.0, -43.3),
