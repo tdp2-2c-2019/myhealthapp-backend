@@ -10,7 +10,7 @@ env:
   - PGUSER=test PGPASSWORD=test PGDATABASE=test
 
 install:
-  - npm install -g codecov
+  - npm install -g codecov webpack jest
 
 before_script:
   - psql -c "CREATE ROLE test WITH PASSWORD 'test' SUPERUSER LOGIN CREATEDB;" -U postgres -d postgres
