@@ -29,7 +29,7 @@ class UserService {
 
   static checkCredentials(dni, password) {
     return new Promise((resolve, reject) => {
-      db('users').where('dni', dni)
+      db('users').where('dni', dni).whereNotNull('password')
         .then((rows) => {
           if (rows.length === 0) {
             // For security reasons we don't inform that the user was not found.
