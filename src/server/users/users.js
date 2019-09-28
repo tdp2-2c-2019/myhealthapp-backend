@@ -2,6 +2,7 @@ import { randomBytes } from 'crypto';
 import UserService from '../services/users';
 import { ValidationError } from '../errors/errors';
 import sendAccountRecoveryEmail from '../utils/mailer';
+import CryptoService from '../utils/crypto';
 
 const router = require('express').Router();
 
@@ -41,6 +42,20 @@ router.post('/account/recover', (req, res, next) => {
       res.status(500).json({ message: err.message });
     });
   });
+});
+
+router.put('/password', (req, res, next) => {
+  const { password, token } = req.body;
+  if (!password || !token) {
+    throw new ValidationError('Password o token faltantes');
+  }
+  UserService.getUserByToken(token).then((user) => {
+    CryptoService.encrypt(password).then((hashedPassword) => {
+      UserService.updateUser({ ...user, token: null, password: hashedPassword })
+        .then(res.sendStatus(200))
+        .catch((err) => { res.status(err.statusCode).json(err.message); });
+    });
+  }).catch(err => res.status(err.statusCode).json({ message: err.message }));
 });
 
 export default router;

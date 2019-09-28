@@ -11,6 +11,18 @@ class UserService {
     });
   }
 
+  static getUserByToken(token) {
+    return new Promise((resolve, reject) => {
+      db.select().from('users').where({ token }).then((rows) => {
+        if (rows.length > 0) {
+          resolve(rows[0]);
+        } else {
+          reject(new NotFoundError('Token invalido'));
+        }
+      });
+    });
+  }
+
   static getUserByMail(mail) {
     return new Promise((resolve, reject) => {
       db.select().from('users').where({ mail }).then((rows) => {
