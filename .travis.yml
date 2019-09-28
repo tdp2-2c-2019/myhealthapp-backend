@@ -9,6 +9,9 @@ services:
 env:
   - PGUSER=test PGPASSWORD=test PGDATABASE=test
 
+install:
+  - npm install -g codecov
+
 before_script:
   - psql -c "CREATE ROLE test WITH PASSWORD 'test' SUPERUSER LOGIN CREATEDB;" -U postgres -d postgres
   - psql -c 'CREATE DATABASE test;' -U postgres -d postgres
@@ -16,7 +19,7 @@ before_script:
 
 script:
   - npm run build
-  - npm run test -- --forceExit
+  - npm run test-ci -- --forceExit
 
 branches:
   only:
