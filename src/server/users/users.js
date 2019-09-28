@@ -1,5 +1,6 @@
 import UserService from '../services/users';
 import { ValidationError } from '../errors/errors';
+import sendAccountRecoveryEmail from '../utils/mailer';
 
 const router = require('express').Router();
 
@@ -17,6 +18,16 @@ router.post('/', (req, res, next) => {
     res.sendStatus(201);
   }).catch((err) => {
     res.status(err.statusCode).json({ error: err.message });
+  });
+});
+
+router.post('/account/recover', (req, res, next) => {
+  if (!req.query.mail) {
+    throw new ValidationError('Ingrese un mail');
+  }
+  UserService.getUserByMail(req.query.mail).then((user) => {
+    // Generate token and save it to db
+    sendAccountRecoveryEmail(user);
   });
 });
 

@@ -3,6 +3,18 @@ import { NotFoundError, AuthorizationError, ResourceAlreadyExistsError } from '.
 import CryptoService from '../utils/crypto';
 
 class UserService {
+  static getUserByMail(mail) {
+    return new Promise((resolve, reject) => {
+      db.select().from('users').where({ mail }.then((rows) => {
+        if (rows.length > 0) {
+          resolve(rows[0]);
+        } else {
+          reject(new NotFoundError('Usuario no encontrado'));
+        }
+      }));
+    });
+  }
+
   static createUser(dni, password, mail, firstName, lastName, plan) {
     return new Promise((resolve, reject) => {
       CryptoService.encrypt(password).then((hashedPassword) => {

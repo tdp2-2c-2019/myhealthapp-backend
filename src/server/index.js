@@ -16,8 +16,6 @@ app.use('/api/users', require('./users/users').default);
 
 app.post('/api/login', HandlerGenerator.login);
 
-app.get('/api/mail', require('./utils/mailer').default);
-
 app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
