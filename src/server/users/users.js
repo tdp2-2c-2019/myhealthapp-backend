@@ -7,8 +7,8 @@ const router = require('express').Router();
 
 // User registers with dni, mail and password and we verify against db
 router.post('/', (req, res, next) => {
-  if (!req.body.dni || !req.body.mail || !req.body.password) {
-    throw new ValidationError('DNI, mail o passwords no encontrados');
+  if (!req.body.dni || !req.body.mail || !req.body.password || !req.body.plan) {
+    throw new ValidationError('DNI, mail, plan o passwords no encontrados');
   }
   UserService.createUser(req.body.dni,
     req.body.password,
@@ -18,7 +18,7 @@ router.post('/', (req, res, next) => {
     req.body.plan).then(() => {
     res.sendStatus(201);
   }).catch((err) => {
-    res.status(err.statusCode).json({ error: err.message });
+    res.status(err.statusCode ? err.statusCode : 500).json({ error: err.message });
   });
 });
 
@@ -36,6 +36,8 @@ router.post('/account/recover', (req, res, next) => {
       } else {
         res.sendStatus(200);
       }
+    }).catch((err) => {
+      res.status(500).json({ message: err.message });
     });
   });
 });
