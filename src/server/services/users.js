@@ -39,7 +39,6 @@ class UserService {
     return new Promise((resolve, reject) => {
       CryptoService.encrypt(password).then((hashedPassword) => {
         db.select().from('users').where({ dni, plan }).then((rows) => {
-          console.log(rows[0]);
           if (rows.length > 0) {
             if (rows[0].password !== null) reject(new ResourceAlreadyExistsError('El usuario con este DNI ya existe'));
             if (rows[0].blocked) reject(new AuthorizationError('Su usuario esta bloqueado, contacte a mesa de ayuda'));
