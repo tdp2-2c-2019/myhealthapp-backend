@@ -16,7 +16,7 @@ before_script:
 
 script:
   - npm run build
-  - npm run test
+  - npm run test -- --force-exit
 
 branches:
   only:
