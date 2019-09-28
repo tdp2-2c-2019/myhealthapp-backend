@@ -3,6 +3,14 @@ import { NotFoundError, AuthorizationError, ResourceAlreadyExistsError } from '.
 import CryptoService from '../utils/crypto';
 
 class UserService {
+  static updateUser(user) {
+    return new Promise((resolve, reject) => {
+      db('users').where({ dni: user.dni }).update({ ...user })
+        .then(resolve())
+        .catch(() => reject(new Error('Ocurrió un error al actualizar el usuario')));
+    });
+  }
+
   static getUserByMail(mail) {
     return new Promise((resolve, reject) => {
       db.select().from('users').where({ mail }.then((rows) => {

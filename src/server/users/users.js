@@ -29,13 +29,14 @@ router.post('/account/recover', (req, res, next) => {
   UserService.getUserByMail(req.query.mail).then((user) => {
     const token = randomBytes(5, (err, buffer) => buffer.toString());
     const userWithToken = { ...user, token };
-    // TODO: Save token to db to check later
-    const err = sendAccountRecoveryEmail(userWithToken);
-    if (err != null) {
-      res.sendStatus(500);
-    } else {
-      res.sendStatus(200);
-    }
+    UserService.updateUser(userWithToken).then(() => {
+      const err = sendAccountRecoveryEmail(userWithToken);
+      if (err != null) {
+        res.sendStatus(500);
+      } else {
+        res.sendStatus(200);
+      }
+    });
   });
 });
 
