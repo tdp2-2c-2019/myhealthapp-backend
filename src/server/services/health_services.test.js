@@ -26,30 +26,35 @@ describe('Health Services', () => {
     expect(expectedServices).toEqual(expect.arrayContaining(services));
   });
 
-  test('returns all hospitals', () => {
+  test('returns all hospitals', async () => {
     const expectedHospitals = [
       {
         id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
       }, {
         id: 2, lat: -37, lon: -53.3, minimum_plan: 2, name: 'hospital2', mail: 'hospital2@gmail.com', telephone: 534678
       }];
-    return expect(HealthServices.getHospitals()).resolves.toStrictEqual(expectedHospitals);
+    const hospitals = await HealthServices.getHospitals();
+    expect(hospitals).toHaveLength(expectedHospitals.length);
+    expect(hospitals).toEqual(expect.arrayContaining(expectedHospitals));
+    expect(expectedHospitals).toEqual(expect.arrayContaining(hospitals));
   });
 
-  test('returns hospitals filtered by name', () => {
+  test('returns hospitals filtered by name', async () => {
     const expectedHospitals = [
       {
         id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
       }];
-    return expect(HealthServices.getHospitals({ name: 'hospital1' })).resolves.toStrictEqual(expectedHospitals);
+    const hospitals = await HealthServices.getHospitals({ name: 'hospital1' });
+    expect(hospitals).toEqual(expectedHospitals);
   });
 
-  test('returns hospitals filtered by specialization', () => {
+  test('returns hospitals filtered by specialization', async () => {
     const expectedHospitals = [
       {
         id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
       }];
-    return expect(HealthServices.getHospitals({ specializations: ['Dermatologia'] })).resolves.toStrictEqual(expectedHospitals);
+    const hospitals = await HealthServices.getHospitals({ specializations: ['Dermatologia'] });
+    expect(hospitals).toEqual(expectedHospitals);
   });
 
   test('returns all doctors', async () => {
@@ -66,25 +71,27 @@ describe('Health Services', () => {
     expect(expectedDoctors).toEqual(expect.arrayContaining(doctors));
   });
 
-  test('returns doctors filtered by name', () => {
+  test('returns doctors filtered by name', async () => {
     const expectedDoctors = [
       {
         id: 1, lat: -33, lon: -43.3, mail: 'jperez@gmail.com', minimum_plan: 1, name: 'Jorge Perez', telephone: 47341234
       }
     ];
-    return expect(HealthServices.getDoctors({ name: 'Jorge Perez' })).resolves.toStrictEqual(expectedDoctors);
+    const doctors = await HealthServices.getDoctors({ name: 'Jorge Perez' });
+    expect(doctors).toEqual(expectedDoctors);
   });
 
-  test('returns doctors filtered by specialization', () => {
+  test('returns doctors filtered by specialization', async () => {
     const expectedDoctors = [
       {
         id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez', telephone: 528561
       }
     ];
-    return expect(HealthServices.getDoctors({ specializations: ['Odontologia'] })).resolves.toStrictEqual(expectedDoctors);
+    const doctors = await HealthServices.getDoctors({ specializations: ['Odontologia'] });
+    expect(doctors).toEqual(expectedDoctors);
   });
 
-  test('returns hopsital with selected ID', () => {
+  test('returns hopsital with selected ID', async () => {
     const expectedHospital = {
       id: 1,
       minimum_plan: 1,
@@ -94,12 +101,12 @@ describe('Health Services', () => {
       lat: -33,
       lon: -43.3
     };
-    return expect(HealthServices.getHospitalByID(1)).resolves.toStrictEqual(expectedHospital);
+    await expect(HealthServices.getHospitalByID(1)).resolves.toStrictEqual(expectedHospital);
   });
 
-  test('returns error when there is no hospital with provided ID', () => expect(HealthServices.getHospitalByID(3)).rejects.toThrow(NotFoundError));
+  test('returns error when there is no hospital with provided ID', async () => expect(HealthServices.getHospitalByID(3)).rejects.toThrow(NotFoundError));
 
-  test('returns doctor with selected ID', () => {
+  test('returns doctor with selected ID', async () => {
     const expectedDoctor = {
       id: 1,
       minimum_plan: 1,
@@ -109,8 +116,8 @@ describe('Health Services', () => {
       lat: -33,
       lon: -43.3
     };
-    return expect(HealthServices.getDoctorByID(1)).resolves.toStrictEqual(expectedDoctor);
+    await expect(HealthServices.getDoctorByID(1)).resolves.toStrictEqual(expectedDoctor);
   });
 
-  test('returns error when there is no doctor with provided ID', () => expect(HealthServices.getDoctorByID(3)).rejects.toThrow(NotFoundError));
+  test('returns error when there is no doctor with provided ID', async () => expect(HealthServices.getDoctorByID(3)).rejects.toThrow(NotFoundError));
 });
