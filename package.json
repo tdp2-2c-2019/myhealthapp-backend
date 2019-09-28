@@ -11,7 +11,7 @@
     "debug": "nodemon --inspect --exec babel-node src/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "jest",
-    "test-ci": "jest && codecov"
+    "coverage-upload": "codecov"
   },
   "author": "tdp2-2c-2019",
   "dependencies": {
