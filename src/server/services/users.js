@@ -15,7 +15,8 @@ class UserService {
     return new Promise((resolve, reject) => {
       db.select().from('users').where({ token }).then((rows) => {
         if (rows.length > 0) {
-          resolve(rows[0]);
+          if (rows[0].blocked) reject(new AuthorizationError('Su usuario esta bloqueado, contacte a mesa de ayuda'));
+          else resolve(rows[0]);
         } else {
           reject(new NotFoundError('Token invalido'));
         }
@@ -27,7 +28,8 @@ class UserService {
     return new Promise((resolve, reject) => {
       db.select().from('users').where({ mail }).then((rows) => {
         if (rows.length > 0) {
-          resolve(rows[0]);
+          if (rows[0].blocked) reject(new AuthorizationError('Su usuario esta bloqueado, contacte a mesa de ayuda'));
+          else resolve(rows[0]);
         } else {
           reject(new NotFoundError('Usuario no encontrado'));
         }
