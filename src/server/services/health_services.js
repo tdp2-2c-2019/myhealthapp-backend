@@ -8,12 +8,28 @@ class HealthService {
     return Promise.all([hospitals, doctors]).then(res => res[0].concat(res[1]));
   }
 
-  static getHospitals() {
-    return db('hospitals').select();
+  static getHospitals(filters = {}) {
+    const { specializations, ...normalFilters } = filters;
+    let query = db('hospitals').select('hospitals.id', 'hospitals.minimum_plan', 'hospitals.name', 'hospitals.mail', 'hospitals.telephone', 'hospitals.lat', 'hospitals.lon').distinct()
+      .where(normalFilters);
+    if (specializations !== undefined) {
+      query = query.innerJoin('hospitals_specializations', 'hospitals.id', 'hospitals_specializations.hospital_id')
+        .innerJoin('specializations', 'specializations.id', 'hospitals_specializations.specialization_id')
+        .whereIn('specializations.name', specializations);
+    }
+    return query;
   }
 
-  static getDoctors() {
-    return db('doctors').select();
+  static getDoctors(filters = {}) {
+    const { specializations, ...normalFilters } = filters;
+    let query = db('doctors').select('doctors.id', 'doctors.minimum_plan', 'doctors.name', 'doctors.mail', 'doctors.telephone', 'doctors.lat', 'doctors.lon').distinct()
+      .where(normalFilters);
+    if (specializations !== undefined) {
+      query = query.innerJoin('doctors_specializations', 'doctors.id', 'doctors_specializations.doctor_id')
+        .innerJoin('specializations', 'specializations.id', 'doctors_specializations.specialization_id')
+        .whereIn('specializations.name', specializations);
+    }
+    return query;
   }
 
   static getHospitalByID(id) {
