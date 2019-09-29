@@ -3,6 +3,40 @@ import { NotFoundError, AuthorizationError, ResourceAlreadyExistsError } from '.
 import CryptoService from '../utils/crypto';
 
 class UserService {
+  static updateUser(user) {
+    return new Promise((resolve, reject) => {
+      db('users').where({ dni: user.dni }).update({ ...user })
+        .then(resolve())
+        .catch(() => reject(new Error('Ocurrió un error al actualizar el usuario')));
+    });
+  }
+
+  static getUserByToken(token) {
+    return new Promise((resolve, reject) => {
+      db.select().from('users').where({ token }).then((rows) => {
+        if (rows.length > 0) {
+          if (rows[0].blocked) reject(new AuthorizationError('Su usuario esta bloqueado, contacte a mesa de ayuda'));
+          else resolve(rows[0]);
+        } else {
+          reject(new NotFoundError('Token invalido'));
+        }
+      });
+    });
+  }
+
+  static getUserByMail(mail) {
+    return new Promise((resolve, reject) => {
+      db.select().from('users').where({ mail }).then((rows) => {
+        if (rows.length > 0) {
+          if (rows[0].blocked) reject(new AuthorizationError('Su usuario esta bloqueado, contacte a mesa de ayuda'));
+          else resolve(rows[0]);
+        } else {
+          reject(new NotFoundError('Usuario no encontrado'));
+        }
+      });
+    });
+  }
+
   static createUser(dni, password, mail, firstName, lastName, plan) {
     return new Promise((resolve, reject) => {
       CryptoService.encrypt(password).then((hashedPassword) => {

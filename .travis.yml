@@ -16,7 +16,9 @@ before_script:
 
 script:
   - npm run build
+  - npm i -g codecov
   - npm run test -- --force-exit
+  - npm run coverage-upload
 
 branches:
   only:

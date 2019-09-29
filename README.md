@@ -80,6 +80,39 @@ Expected body:
 
 Response status: 201
 
+#### `POST` /api/users/account/recover
+
+Sends an email to the given mail with a token to reset the password
+
+Auth: No
+
+Expected body:
+
+```json
+    {
+        "mail": "diego@armando.com"
+    }
+```
+
+Response status: 200
+
+#### `PUT` /api/users/password
+
+Resets the users password if the token ius valid
+
+Auth: No
+
+Expected body:
+
+```json
+    {
+        "password": "apassword",
+        "token": "asdbc"
+    }
+```
+
+Response status: 200
+
 ### Health Services
 #### `GET` /api/health-services
 Returns all hospitals and doctors.
