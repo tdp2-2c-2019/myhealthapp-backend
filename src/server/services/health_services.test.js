@@ -53,7 +53,7 @@ describe('Health Services', () => {
       {
         id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
       }];
-    const hospitals = await HealthServices.getHospitals({ specializations: ['Dermatologia'] });
+    const hospitals = await HealthServices.getHospitals({ specialization: 'Dermatologia' });
     expect(hospitals).toEqual(expectedHospitals);
   });
 
@@ -87,7 +87,7 @@ describe('Health Services', () => {
         id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez', telephone: 528561
       }
     ];
-    const doctors = await HealthServices.getDoctors({ specializations: ['Odontologia'] });
+    const doctors = await HealthServices.getDoctors({ specialization: 'Odontologia' });
     expect(doctors).toEqual(expectedDoctors);
   });
 

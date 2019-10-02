@@ -2,32 +2,32 @@ import { db } from '../db';
 import { NotFoundError } from '../errors/errors';
 
 class HealthService {
-  static getHealthServices() {
-    const hospitals = Promise.resolve(db('hospitals').select());
-    const doctors = Promise.resolve(db('doctors').select());
+  static getHealthServices(filters = {}) {
+    const hospitals = Promise.resolve(this.getHospitals(filters));
+    const doctors = Promise.resolve(this.getDoctors(filters));
     return Promise.all([hospitals, doctors]).then(res => res[0].concat(res[1]));
   }
 
   static getHospitals(filters = {}) {
-    const { specializations, ...normalFilters } = filters;
+    const { specialization, ...normalFilters } = filters;
     let query = db('hospitals').select('hospitals.id', 'hospitals.minimum_plan', 'hospitals.name', 'hospitals.mail', 'hospitals.telephone', 'hospitals.lat', 'hospitals.lon').distinct()
       .where(normalFilters);
-    if (specializations !== undefined) {
+    if (specialization !== undefined) {
       query = query.innerJoin('hospitals_specializations', 'hospitals.id', 'hospitals_specializations.hospital_id')
         .innerJoin('specializations', 'specializations.id', 'hospitals_specializations.specialization_id')
-        .whereIn('specializations.name', specializations);
+        .where('specializations.name', specialization);
     }
     return query;
   }
 
   static getDoctors(filters = {}) {
-    const { specializations, ...normalFilters } = filters;
+    const { specialization, ...normalFilters } = filters;
     let query = db('doctors').select('doctors.id', 'doctors.minimum_plan', 'doctors.name', 'doctors.mail', 'doctors.telephone', 'doctors.lat', 'doctors.lon').distinct()
       .where(normalFilters);
-    if (specializations !== undefined) {
+    if (specialization !== undefined) {
       query = query.innerJoin('doctors_specializations', 'doctors.id', 'doctors_specializations.doctor_id')
         .innerJoin('specializations', 'specializations.id', 'doctors_specializations.specialization_id')
-        .whereIn('specializations.name', specializations);
+        .where('specializations.name', specialization);
     }
     return query;
   }
