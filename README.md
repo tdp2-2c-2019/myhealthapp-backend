@@ -145,6 +145,8 @@ Returns all hospitals.
 
 Auth: Yes
 
+Query parameters: name (string), specialization (string)
+
 Response body 200:
 
 ```json
@@ -170,6 +172,8 @@ Response body 200:
 Returns all doctors.
 
 Auth: Yes
+
+Query parameters: name (string), specialization (string)
 
 Response body 200:
 
