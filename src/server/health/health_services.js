@@ -28,8 +28,10 @@ const filterByDistance = (element, filters) => {
     lat: Number(element.lat),
     lon: Number(element.lon)
   };
-  return (!distance && calculateDistance(origin, destination) < maxDistance)
-    || (distance && calculateDistance(origin, destination) < distance);
+  // Disable distance filter temporarily
+  return true;
+  // return (!distance && calculateDistance(origin, destination) < maxDistance)
+  //   || (distance && calculateDistance(origin, destination) < distance);
 };
 
 router.get('/hospitals', (req, res, next) => {
