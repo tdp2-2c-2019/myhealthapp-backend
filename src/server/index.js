@@ -1,16 +1,18 @@
 require('dotenv').config();
 const express = require('express');
-const { checkToken, HandlerGenerator } = require('./middleware/jwt');
+const cors = require('cors');
+const { HandlerGenerator } = require('./middleware/jwt');
 
 const app = express();
 
+app.use(cors());
 app.use(express.static('dist'));
 app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
 
-app.use('/api/health-services', checkToken, require('./health/health_services').default);
+app.use('/api/health-services', require('./health/health_services').default);
 
 app.use('/api/users', require('./users/users').default);
 

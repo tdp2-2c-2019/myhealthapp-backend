@@ -11,13 +11,43 @@ describe('Health Services', () => {
   test('returns all health services', async () => {
     const expectedServices = [
       {
-        id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
+        id: 1,
+        lat: -33,
+        lon: -43.3,
+        minimum_plan: 1,
+        name: 'Hospital Alemán',
+        mail: 'hospital_aleman@gmail.com',
+        telephone: 48277000,
+        address: 'Pueyrredón 1640'
       }, {
-        id: 2, lat: -37, lon: -53.3, minimum_plan: 2, name: 'hospital2', mail: 'hospital2@gmail.com', telephone: 534678
+        id: 2,
+        lat: -37,
+        lon: -53.3,
+        minimum_plan: 2,
+        name: 'Hospital Italiano',
+        mail: 'hospital_italiano@gmail.com',
+        telephone: 49590300,
+        address: 'Tte. Gral. Juan Domingo Perón 4190, C.A.B.A.'
       }, {
-        id: 1, lat: -33, lon: -43.3, mail: 'jperez@gmail.com', minimum_plan: 1, name: 'Jorge Perez', telephone: 47341234
+        id: 1,
+        lat: -33,
+        lon: -43.3,
+        mail: 'jperez@gmail.com',
+        minimum_plan: 1,
+        name: 'Jorge Perez',
+        telephone: 47341234,
+        address: 'San Juan 3100, C.A.B.A',
+        address_notes: '1 B',
       }, {
-        id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez', telephone: 528561
+        id: 2,
+        lat: -37,
+        lon: -53.3,
+        mail: 'crodriguez@gmail.com',
+        minimum_plan: 2,
+        name: 'Claudia Rodriguez',
+        telephone: 528561,
+        address: 'Matienzo 345, C.A.B.A',
+        address_notes: 'Puerta roja'
       }
     ];
     const services = await HealthServices.getHealthServices();
@@ -29,9 +59,23 @@ describe('Health Services', () => {
   test('returns all hospitals', async () => {
     const expectedHospitals = [
       {
-        id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
+        id: 1,
+        lat: -33,
+        lon: -43.3,
+        minimum_plan: 1,
+        name: 'Hospital Alemán',
+        mail: 'hospital_aleman@gmail.com',
+        telephone: 48277000,
+        address: 'Pueyrredón 1640'
       }, {
-        id: 2, lat: -37, lon: -53.3, minimum_plan: 2, name: 'hospital2', mail: 'hospital2@gmail.com', telephone: 534678
+        id: 2,
+        lat: -37,
+        lon: -53.3,
+        minimum_plan: 2,
+        name: 'Hospital Italiano',
+        mail: 'hospital_italiano@gmail.com',
+        telephone: 49590300,
+        address: 'Tte. Gral. Juan Domingo Perón 4190, C.A.B.A.'
       }];
     const hospitals = await HealthServices.getHospitals();
     expect(hospitals).toHaveLength(expectedHospitals.length);
@@ -42,27 +86,57 @@ describe('Health Services', () => {
   test('returns hospitals filtered by name', async () => {
     const expectedHospitals = [
       {
-        id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
+        id: 1,
+        lat: -33,
+        lon: -43.3,
+        minimum_plan: 1,
+        name: 'Hospital Alemán',
+        mail: 'hospital_aleman@gmail.com',
+        telephone: 48277000,
+        address: 'Pueyrredón 1640'
       }];
-    const hospitals = await HealthServices.getHospitals({ name: 'hospital1' });
+    const hospitals = await HealthServices.getHospitals({ name: 'Hospital Alemán' });
     expect(hospitals).toEqual(expectedHospitals);
   });
 
   test('returns hospitals filtered by specialization', async () => {
     const expectedHospitals = [
       {
-        id: 1, lat: -33, lon: -43.3, minimum_plan: 1, name: 'hospital1', mail: 'hospital1@gmail.com', telephone: 43456796
+        id: 1,
+        lat: -33,
+        lon: -43.3,
+        minimum_plan: 1,
+        name: 'Hospital Alemán',
+        mail: 'hospital_aleman@gmail.com',
+        telephone: 48277000,
+        address: 'Pueyrredón 1640'
       }];
-    const hospitals = await HealthServices.getHospitals({ specializations: ['Dermatologia'] });
+    const hospitals = await HealthServices.getHospitals({ specialization: 'Dermatologia' });
     expect(hospitals).toEqual(expectedHospitals);
   });
 
   test('returns all doctors', async () => {
     const expectedDoctors = [
       {
-        id: 1, lat: -33, lon: -43.3, mail: 'jperez@gmail.com', minimum_plan: 1, name: 'Jorge Perez', telephone: 47341234
+        id: 1,
+        lat: -33,
+        lon: -43.3,
+        mail: 'jperez@gmail.com',
+        minimum_plan: 1,
+        name: 'Jorge Perez',
+        telephone: 47341234,
+        address: 'San Juan 3100, C.A.B.A',
+        address_notes: '1 B',
       }, {
-        id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez', telephone: 528561
+        id: 2,
+        lat: -37,
+        lon: -53.3,
+        mail: 'crodriguez@gmail.com',
+        minimum_plan: 2,
+        name: 'Claudia Rodriguez',
+        telephone: 528561,
+        address: 'Matienzo 345, C.A.B.A',
+        address_notes: 'Puerta roja'
       }
     ];
     const doctors = await HealthServices.getDoctors();
@@ -74,7 +148,15 @@ describe('Health Services', () => {
   test('returns doctors filtered by name', async () => {
     const expectedDoctors = [
       {
-        id: 1, lat: -33, lon: -43.3, mail: 'jperez@gmail.com', minimum_plan: 1, name: 'Jorge Perez', telephone: 47341234
+        id: 1,
+        lat: -33,
+        lon: -43.3,
+        mail: 'jperez@gmail.com',
+        minimum_plan: 1,
+        name: 'Jorge Perez',
+        telephone: 47341234,
+        address: 'San Juan 3100, C.A.B.A',
+        address_notes: '1 B',
       }
     ];
     const doctors = await HealthServices.getDoctors({ name: 'Jorge Perez' });
@@ -84,10 +166,18 @@ describe('Health Services', () => {
   test('returns doctors filtered by specialization', async () => {
     const expectedDoctors = [
       {
-        id: 2, lat: -37, lon: -53.3, mail: 'crodriguez@gmail.com', minimum_plan: 2, name: 'Claudia Rodriguez', telephone: 528561
+        id: 2,
+        lat: -37,
+        lon: -53.3,
+        mail: 'crodriguez@gmail.com',
+        minimum_plan: 2,
+        name: 'Claudia Rodriguez',
+        telephone: 528561,
+        address: 'Matienzo 345, C.A.B.A',
+        address_notes: 'Puerta roja'
       }
     ];
-    const doctors = await HealthServices.getDoctors({ specializations: ['Odontologia'] });
+    const doctors = await HealthServices.getDoctors({ specialization: 'Odontologia' });
     expect(doctors).toEqual(expectedDoctors);
   });
 
@@ -95,9 +185,10 @@ describe('Health Services', () => {
     const expectedHospital = {
       id: 1,
       minimum_plan: 1,
-      name: 'hospital1',
-      mail: 'hospital1@gmail.com',
-      telephone: 43456796,
+      name: 'Hospital Alemán',
+      mail: 'hospital_aleman@gmail.com',
+      telephone: 48277000,
+      address: 'Pueyrredón 1640',
       lat: -33,
       lon: -43.3
     };
@@ -113,6 +204,8 @@ describe('Health Services', () => {
       name: 'Jorge Perez',
       mail: 'jperez@gmail.com',
       telephone: 47341234,
+      address: 'San Juan 3100, C.A.B.A',
+      address_notes: '1 B',
       lat: -33,
       lon: -43.3
     };
