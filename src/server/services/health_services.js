@@ -10,7 +10,16 @@ class HealthService {
 
   static getHospitals(filters = {}) {
     const { specialization, ...normalFilters } = filters;
-    let query = db('hospitals').select('hospitals.id', 'hospitals.minimum_plan', 'hospitals.name', 'hospitals.mail', 'hospitals.telephone', 'hospitals.lat', 'hospitals.lon').distinct()
+    let query = db('hospitals').select(
+      'hospitals.id',
+      'hospitals.minimum_plan',
+      'hospitals.name',
+      'hospitals.mail',
+      'hospitals.telephone',
+      'hospitals.address',
+      'hospitals.lat',
+      'hospitals.lon'
+    ).distinct()
       .where(normalFilters);
     if (specialization !== undefined) {
       query = query.innerJoin('hospitals_specializations', 'hospitals.id', 'hospitals_specializations.hospital_id')
@@ -22,7 +31,17 @@ class HealthService {
 
   static getDoctors(filters = {}) {
     const { specialization, ...normalFilters } = filters;
-    let query = db('doctors').select('doctors.id', 'doctors.minimum_plan', 'doctors.name', 'doctors.mail', 'doctors.telephone', 'doctors.lat', 'doctors.lon').distinct()
+    let query = db('doctors').select(
+      'doctors.id',
+      'doctors.minimum_plan',
+      'doctors.name',
+      'doctors.mail',
+      'doctors.telephone',
+      'doctors.address',
+      'doctors.address_notes',
+      'doctors.lat',
+      'doctors.lon'
+    ).distinct()
       .where(normalFilters);
     if (specialization !== undefined) {
       query = query.innerJoin('doctors_specializations', 'doctors.id', 'doctors_specializations.doctor_id')
