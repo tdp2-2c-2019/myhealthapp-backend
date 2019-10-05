@@ -246,3 +246,69 @@ Response body 404:
     "error": "Doctor not found"
 }
 ```
+
+#### `GET` /api/languages
+Returns all languages.
+
+Response body 200:
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Español"
+    },
+    {
+        "id": 2,
+        "name": "Ingles"
+    }
+]
+```
+
+#### `GET` /api/plans
+Returns all plans.
+
+Response body 200:
+
+```json
+[
+    {
+        "plan": 1,
+        "plan_name": "Plan 1"
+    },
+    {
+        "plan": 2,
+        "plan_name": "Plan 2"
+    },
+    {
+        "plan": 3,
+        "plan_name": "Plan 3"
+    }
+]
+```
+
+#### `GET` /api/specializations
+Returns all specializations.
+
+Response body 200:
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Cardiologia"
+    },
+    {
+        "id": 2,
+        "name": "Clinica"
+    },
+    {
+        "id": 3,
+        "name": "Dermatologia"
+    },
+    {
+        "id": 4,
+        "name": "Odontologia"
+    }
+]
+```

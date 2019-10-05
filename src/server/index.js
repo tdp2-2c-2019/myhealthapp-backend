@@ -15,6 +15,9 @@ app.use(express.urlencoded({
 app.use('/api/health-services', require('./health/health_services').default);
 
 app.use('/api/users', require('./users/users').default);
+app.use('/api/plans', require('./plans/plans').default);
+app.use('/api/specializations', require('./specializations/specializations').default);
+app.use('/api/languages', require('./languages/languages').default);
 
 app.post('/api/login', HandlerGenerator.login);
 
