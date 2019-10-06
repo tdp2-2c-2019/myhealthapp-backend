@@ -8,6 +8,26 @@ class HealthService {
     return Promise.all([hospitals, doctors]).then(res => res[0].concat(res[1]));
   }
 
+  static createHospital(name, telephone, minimum_plan, mail, lat, lon, address) {
+    return new Promise((resolve, reject) => {
+      db('hospitals').insert({
+        name, telephone, minimum_plan, mail, lat, lon, address
+      }).returning('*')
+        .then(rows => resolve(rows[0]))
+        .catch(e => reject(e));
+    });
+  }
+
+  static createDoctor(name, telephone, minimum_plan, mail, lat, lon, address, address_notes) {
+    return new Promise((resolve, reject) => {
+      db('doctors').insert({
+        name, telephone, minimum_plan, mail, lat, lon, address, address_notes
+      }).returning('*')
+        .then(rows => resolve(rows[0]))
+        .catch(e => reject(e));
+    });
+  }
+
   static getHospitals(filters = {}) {
     const { specialization, ...normalFilters } = filters;
     let query = db('hospitals').select(
