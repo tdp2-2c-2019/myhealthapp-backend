@@ -1,1 +1,1 @@
-drop database myhealhtapp;
+drop database myhealthapp;

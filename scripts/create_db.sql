@@ -1,1 +1,1 @@
-create database myhealhtapp;
+create database myhealthapp;
