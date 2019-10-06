@@ -213,4 +213,52 @@ describe('Health Services', () => {
   });
 
   test('returns error when there is no doctor with provided ID', async () => expect(HealthServices.getDoctorByID(3)).rejects.toThrow(NotFoundError));
+
+  test('creates a new doctor', async () => {
+    const newDoctor = {
+      minimum_plan: 2,
+      name: 'Stephen Strange',
+      mail: 'sstrange@gmail.com',
+      telephone: 55547862,
+      address: 'Av. Rivadavia 1460',
+      address_notes: '2 A',
+      lat: -32,
+      lon: -41
+    };
+    const createdDoctor = await HealthServices.createDoctor(
+      newDoctor.name,
+      newDoctor.telephone,
+      newDoctor.minimum_plan,
+      newDoctor.mail,
+      newDoctor.lat,
+      newDoctor.lon,
+      newDoctor.address,
+      newDoctor.address_notes
+    );
+    delete createdDoctor.id;
+    expect(newDoctor).toStrictEqual(createdDoctor);
+  });
+
+  test('creates new hospital', async () => {
+    const newHospital = {
+      minimum_plan: 1,
+      name: 'Hospital Central',
+      mail: 'hospital_central@gmail.com',
+      telephone: 48277992,
+      address: 'Cerrito 132',
+      lat: -33.4,
+      lon: -43.7
+    };
+    const createdHospital = await HealthServices.createHospital(
+      newHospital.name,
+      newHospital.telephone,
+      newHospital.minimum_plan,
+      newHospital.mail,
+      newHospital.lat,
+      newHospital.lon,
+      newHospital.address
+    );
+    delete createdHospital.id;
+    expect(newHospital).toStrictEqual(createdHospital);
+  });
 });
