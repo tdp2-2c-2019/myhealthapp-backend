@@ -17,7 +17,7 @@ const getDistanceFilters = (query) => {
 
 const getFilters = (query) => {
   const filters = { ...query };
-  Object.keys(filters).forEach(key => (filters[key] === undefined || key.localeCompare('originLat') === 0 || key.localeCompare('originLon') === 0) && delete filters[key]);
+  Object.keys(filters).forEach(key => (filters[key] === undefined || filters[key].localeCompare('') === 0 || key.localeCompare('originLat') === 0 || key.localeCompare('originLon') === 0) && delete filters[key]);
   return filters;
 };
 
