@@ -86,7 +86,8 @@ router.post('/doctors', (req, res, next) => {
 });
 
 router.get('/', (req, res, next) => {
-  HealthService.getHealthServices()
+  const filters = getFilters(req.query);
+  HealthService.getHealthServices(filters)
     .then(services => res.status(200).send(services)).catch(err => next(err));
 });
 
