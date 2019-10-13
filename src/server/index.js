@@ -21,6 +21,10 @@ app.use('/api/languages', require('./languages/languages').default);
 
 app.post('/api/login', HandlerGenerator.login);
 
+app.get('/api/search-key', (req, res) => {
+  res.status(200).json({ key: process.env.GCP_API_KEY });
+});
+
 app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
