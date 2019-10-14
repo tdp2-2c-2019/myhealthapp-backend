@@ -312,3 +312,15 @@ Response body 200:
     }
 ]
 ```
+
+#### `GET` /api/zones
+Returns all zones.
+
+Response body 200:
+
+```json
+[
+    "Belgrano",
+    "Saavedra"
+]
+```
