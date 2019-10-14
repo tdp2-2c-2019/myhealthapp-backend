@@ -53,7 +53,7 @@ router.post('/hospitals', (req, res, next) => {
   if (!req.body.minimum_plan || !req.body.name || !req.body.telephone || !req.body.mail || !req.body.address) {
     throw new ValidationError('Plan minimo, nombre, telefono, direccion o mail no encontrados');
   }
-  HealthService.createHospital(req.body.name, req.body.telephone, req.body.minimum_plan, req.body.mail, req.body.lat, req.body.lon, req.body.address)
+  HealthService.createHospital(req.body.name, req.body.telephone, req.body.minimum_plan, req.body.mail, req.body.lat, req.body.lon, req.body.address, req.body.zone)
     .then((hospital) => { res.status(201).json(hospital); })
     .catch((err) => {
       res.status(err.statusCode ? err.statusCode : 500).json({ error: err.message });
@@ -78,7 +78,7 @@ router.post('/doctors', (req, res, next) => {
   if (!req.body.minimum_plan || !req.body.name || !req.body.telephone || !req.body.mail || !req.body.address) {
     throw new ValidationError('Plan minimo, nombre, telefono, dirección o mail no encontrados');
   }
-  HealthService.createDoctor(req.body.name, req.body.telephone, req.body.minimum_plan, req.body.mail, req.body.lat, req.body.lon, req.body.address, req.body.address_notes)
+  HealthService.createDoctor(req.body.name, req.body.telephone, req.body.minimum_plan, req.body.mail, req.body.lat, req.body.lon, req.body.address, req.body.address_notes, req.body.zone)
     .then((doctor) => { res.status(201).json(doctor); })
     .catch((err) => {
       res.status(err.statusCode ? err.statusCode : 500).json({ error: err.message });
