@@ -4,7 +4,7 @@ class ZoneService {
   static getZones() {
     return new Promise((resolve, reject) => {
       db.select('zone').from('doctors').whereNotNull('zone').union([db.select('zone').from('hospitals').whereNotNull('zone')])
-        .then(rows => resolve(rows))
+        .then(rows => resolve(rows.map(zone => zone.zone)))
         .catch(() => reject(new Error('Ocurrió un error al obtener las zonas')));
     });
   }
