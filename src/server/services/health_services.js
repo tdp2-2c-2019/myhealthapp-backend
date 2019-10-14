@@ -38,7 +38,8 @@ class HealthService {
       'hospitals.telephone',
       'hospitals.address',
       'hospitals.lat',
-      'hospitals.lon'
+      'hospitals.lon',
+      'hospitals.zone'
     ).distinct()
       .where(name ? { 'hospitals.name': name, ...normalFilters } : { ...normalFilters });
     if (specialization !== undefined) {
@@ -60,7 +61,8 @@ class HealthService {
       'doctors.address',
       'doctors.address_notes',
       'doctors.lat',
-      'doctors.lon'
+      'doctors.lon',
+      'doctors.zone'
     ).distinct()
       .where(name ? { 'doctors.name': name, ...normalFilters } : { ...normalFilters });
     if (specialization !== undefined) {
