@@ -18,7 +18,8 @@ describe('Health Services', () => {
         name: 'Hospital Alemán',
         mail: 'hospital_aleman@gmail.com',
         telephone: 48277000,
-        address: 'Pueyrredón 1640'
+        address: 'Pueyrredón 1640',
+        zone: 'Parque chas'
       }, {
         id: 2,
         lat: -37,
@@ -27,7 +28,8 @@ describe('Health Services', () => {
         name: 'Hospital Italiano',
         mail: 'hospital_italiano@gmail.com',
         telephone: 49590300,
-        address: 'Tte. Gral. Juan Domingo Perón 4190, C.A.B.A.'
+        address: 'Tte. Gral. Juan Domingo Perón 4190, C.A.B.A.',
+        zone: 'Belgrano'
       }, {
         id: 1,
         lat: -33,
@@ -38,6 +40,7 @@ describe('Health Services', () => {
         telephone: 47341234,
         address: 'San Juan 3100, C.A.B.A',
         address_notes: '1 B',
+        zone: 'Saavedra'
       }, {
         id: 2,
         lat: -37,
@@ -47,7 +50,8 @@ describe('Health Services', () => {
         name: 'Claudia Rodriguez',
         telephone: 528561,
         address: 'Matienzo 345, C.A.B.A',
-        address_notes: 'Puerta roja'
+        address_notes: 'Puerta roja',
+        zone: 'Chacarita'
       }
     ];
     const services = await HealthServices.getHealthServices();
@@ -66,7 +70,8 @@ describe('Health Services', () => {
         name: 'Hospital Alemán',
         mail: 'hospital_aleman@gmail.com',
         telephone: 48277000,
-        address: 'Pueyrredón 1640'
+        address: 'Pueyrredón 1640',
+        zone: 'Parque chas'
       }, {
         id: 2,
         lat: -37,
@@ -75,7 +80,8 @@ describe('Health Services', () => {
         name: 'Hospital Italiano',
         mail: 'hospital_italiano@gmail.com',
         telephone: 49590300,
-        address: 'Tte. Gral. Juan Domingo Perón 4190, C.A.B.A.'
+        address: 'Tte. Gral. Juan Domingo Perón 4190, C.A.B.A.',
+        zone: 'Belgrano'
       }];
     const hospitals = await HealthServices.getHospitals();
     expect(hospitals).toHaveLength(expectedHospitals.length);
@@ -93,7 +99,8 @@ describe('Health Services', () => {
         name: 'Hospital Alemán',
         mail: 'hospital_aleman@gmail.com',
         telephone: 48277000,
-        address: 'Pueyrredón 1640'
+        address: 'Pueyrredón 1640',
+        zone: 'Parque chas'
       }];
     const hospitals = await HealthServices.getHospitals({ name: 'Hospital Alemán' });
     expect(hospitals).toEqual(expectedHospitals);
@@ -109,7 +116,8 @@ describe('Health Services', () => {
         name: 'Hospital Alemán',
         mail: 'hospital_aleman@gmail.com',
         telephone: 48277000,
-        address: 'Pueyrredón 1640'
+        address: 'Pueyrredón 1640',
+        zone: 'Parque chas'
       }];
     const hospitals = await HealthServices.getHospitals({ specialization: 'Dermatologia' });
     expect(hospitals).toEqual(expectedHospitals);
@@ -127,6 +135,7 @@ describe('Health Services', () => {
         telephone: 47341234,
         address: 'San Juan 3100, C.A.B.A',
         address_notes: '1 B',
+        zone: 'Saavedra'
       }, {
         id: 2,
         lat: -37,
@@ -136,7 +145,8 @@ describe('Health Services', () => {
         name: 'Claudia Rodriguez',
         telephone: 528561,
         address: 'Matienzo 345, C.A.B.A',
-        address_notes: 'Puerta roja'
+        address_notes: 'Puerta roja',
+        zone: 'Chacarita'
       }
     ];
     const doctors = await HealthServices.getDoctors();
@@ -157,6 +167,7 @@ describe('Health Services', () => {
         telephone: 47341234,
         address: 'San Juan 3100, C.A.B.A',
         address_notes: '1 B',
+        zone: 'Saavedra'
       }
     ];
     const doctors = await HealthServices.getDoctors({ name: 'Jorge Perez' });
@@ -174,7 +185,8 @@ describe('Health Services', () => {
         name: 'Claudia Rodriguez',
         telephone: 528561,
         address: 'Matienzo 345, C.A.B.A',
-        address_notes: 'Puerta roja'
+        address_notes: 'Puerta roja',
+        zone: 'Chacarita'
       }
     ];
     const doctors = await HealthServices.getDoctors({ specialization: 'Odontologia' });
@@ -190,7 +202,8 @@ describe('Health Services', () => {
       telephone: 48277000,
       address: 'Pueyrredón 1640',
       lat: -33,
-      lon: -43.3
+      lon: -43.3,
+      zone: 'Parque chas'
     };
     await expect(HealthServices.getHospitalByID(1)).resolves.toStrictEqual(expectedHospital);
   });
@@ -207,7 +220,8 @@ describe('Health Services', () => {
       address: 'San Juan 3100, C.A.B.A',
       address_notes: '1 B',
       lat: -33,
-      lon: -43.3
+      lon: -43.3,
+      zone: 'Saavedra'
     };
     await expect(HealthServices.getDoctorByID(1)).resolves.toStrictEqual(expectedDoctor);
   });
@@ -223,7 +237,8 @@ describe('Health Services', () => {
       address: 'Av. Rivadavia 1460',
       address_notes: '2 A',
       lat: -32,
-      lon: -41
+      lon: -41,
+      zone: 'Palermo'
     };
     const createdDoctor = await HealthServices.createDoctor(
       newDoctor.name,
@@ -233,7 +248,8 @@ describe('Health Services', () => {
       newDoctor.lat,
       newDoctor.lon,
       newDoctor.address,
-      newDoctor.address_notes
+      newDoctor.address_notes,
+      newDoctor.zone
     );
     delete createdDoctor.id;
     expect(newDoctor).toStrictEqual(createdDoctor);
@@ -247,7 +263,8 @@ describe('Health Services', () => {
       telephone: 48277992,
       address: 'Cerrito 132',
       lat: -33.4,
-      lon: -43.7
+      lon: -43.7,
+      zone: 'Liniers'
     };
     const createdHospital = await HealthServices.createHospital(
       newHospital.name,
@@ -256,7 +273,8 @@ describe('Health Services', () => {
       newHospital.mail,
       newHospital.lat,
       newHospital.lon,
-      newHospital.address
+      newHospital.address,
+      newHospital.zone
     );
     delete createdHospital.id;
     expect(newHospital).toStrictEqual(createdHospital);

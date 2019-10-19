@@ -8,20 +8,20 @@ class HealthService {
     return Promise.all([hospitals, doctors]).then(res => res[0].concat(res[1]));
   }
 
-  static createHospital(name, telephone, minimum_plan, mail, lat, lon, address) {
+  static createHospital(name, telephone, minimum_plan, mail, lat, lon, address, zone) {
     return new Promise((resolve, reject) => {
       db('hospitals').insert({
-        name, telephone, minimum_plan, mail, lat, lon, address
+        name, telephone, minimum_plan, mail, lat, lon, address, zone
       }).returning('*')
         .then(rows => resolve(rows[0]))
         .catch(e => reject(e));
     });
   }
 
-  static createDoctor(name, telephone, minimum_plan, mail, lat, lon, address, address_notes) {
+  static createDoctor(name, telephone, minimum_plan, mail, lat, lon, address, address_notes, zone) {
     return new Promise((resolve, reject) => {
       db('doctors').insert({
-        name, telephone, minimum_plan, mail, lat, lon, address, address_notes
+        name, telephone, minimum_plan, mail, lat, lon, address, address_notes, zone
       }).returning('*')
         .then(rows => resolve(rows[0]))
         .catch(e => reject(e));
@@ -38,7 +38,8 @@ class HealthService {
       'hospitals.telephone',
       'hospitals.address',
       'hospitals.lat',
-      'hospitals.lon'
+      'hospitals.lon',
+      'hospitals.zone'
     ).distinct()
       .where(name ? { 'hospitals.name': name, ...normalFilters } : { ...normalFilters });
     if (specialization !== undefined) {
@@ -60,7 +61,8 @@ class HealthService {
       'doctors.address',
       'doctors.address_notes',
       'doctors.lat',
-      'doctors.lon'
+      'doctors.lon',
+      'doctors.zone'
     ).distinct()
       .where(name ? { 'doctors.name': name, ...normalFilters } : { ...normalFilters });
     if (specialization !== undefined) {
