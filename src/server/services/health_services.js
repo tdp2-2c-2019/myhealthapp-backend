@@ -5,7 +5,9 @@ class HealthService {
   static getHealthServices(filters = {}) {
     const hospitals = Promise.resolve(this.getHospitals(filters));
     const doctors = Promise.resolve(this.getDoctors(filters));
-    return Promise.all([hospitals, doctors]).then(res => res[0].concat(res[1]));
+    return Promise.all([
+      hospitals.map(h => { return { h, health_center: true } }), 
+      doctors.map(d => { return { d, health_center: false } })]).then(res => res[0].concat(res[1]));
   }
 
   static createHospital(name, telephone, minimum_plan, mail, lat, lon, address, zone) {
