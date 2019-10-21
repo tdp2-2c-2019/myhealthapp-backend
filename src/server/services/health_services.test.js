@@ -19,7 +19,8 @@ describe('Health Services', () => {
         mail: 'hospital_aleman@gmail.com',
         telephone: 48277000,
         address: 'Pueyrredón 1640',
-        zone: 'Parque chas'
+        zone: 'Parque chas',
+        health_center: true
       }, {
         id: 2,
         lat: -37,
@@ -29,7 +30,8 @@ describe('Health Services', () => {
         mail: 'hospital_italiano@gmail.com',
         telephone: 49590300,
         address: 'Tte. Gral. Juan Domingo Perón 4190, C.A.B.A.',
-        zone: 'Belgrano'
+        zone: 'Belgrano',
+        health_center: true
       }, {
         id: 1,
         lat: -33,
@@ -40,7 +42,8 @@ describe('Health Services', () => {
         telephone: 47341234,
         address: 'San Juan 3100, C.A.B.A',
         address_notes: '1 B',
-        zone: 'Saavedra'
+        zone: 'Saavedra',
+        health_center: false
       }, {
         id: 2,
         lat: -37,
@@ -51,7 +54,8 @@ describe('Health Services', () => {
         telephone: 528561,
         address: 'Matienzo 345, C.A.B.A',
         address_notes: 'Puerta roja',
-        zone: 'Chacarita'
+        zone: 'Chacarita',
+        health_center: false
       }
     ];
     const services = await HealthServices.getHealthServices();

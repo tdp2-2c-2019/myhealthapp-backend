@@ -5,11 +5,11 @@ class HealthService {
   static getHealthServices(filters = {}) {
     const hospitals = Promise.resolve(this.getHospitals(filters));
     const doctors = Promise.resolve(this.getDoctors(filters));
-    return Promise.all([hospitals, doctors]).then(res => {
-        hs = res[0].map(h => { return { h, health_center: true } });
-        ds = res[1].map(d => { return { d, health_center: false } })
-        hs.concat(ds)
-      });
+    return Promise.all([hospitals, doctors]).then((res) => {
+      const hs = res[0].map(h => ({ ...h, health_center: true }));
+      const ds = res[1].map(d => ({ ...d, health_center: false }));
+      return hs.concat(ds);
+    });
   }
 
   static createHospital(name, telephone, minimum_plan, mail, lat, lon, address, zone) {
