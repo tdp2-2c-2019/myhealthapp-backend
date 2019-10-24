@@ -1,5 +1,6 @@
 import { db } from '../db';
 import { NotFoundError } from '../errors/errors';
+import UserService from './users';
 
 class AuthorizationService {
   static getAuthorizations(dni) {
@@ -10,8 +11,17 @@ class AuthorizationService {
             queryBuilder.where('created_by', dni).orWhere('created_for', dni);
           }
         })
-        .then(rows => resolve(rows))
-        .catch(() => reject(new Error('Ocurrió un error al obtener las autorizaciones')));
+        .then(async (rows) => {
+          resolve(await Promise.all(rows.map(async (authorization) => {
+            const createdBy = UserService.getUserByDNI(authorization.created_by);
+            const createdFor = UserService.getUserByDNI(authorization.created_for);
+            const values = await Promise.all([createdBy, createdFor]);
+            return ({ ...authorization, created_by: values[0], created_for: values[1] });
+          })));
+        })
+        .catch(() => {
+          reject(new Error('Ocurrió un error al obtener las autorizaciones'));
+        });
     });
   }
 
@@ -19,9 +29,13 @@ class AuthorizationService {
     return new Promise((resolve, reject) => {
       db.select().from('authorizations')
         .where('id', id)
-        .then((auth) => {
+        .then(async (auth) => {
           if (auth.length === 0) reject(new NotFoundError('Authorization not found'));
-          resolve(auth[0]);
+          const authorization = auth[0];
+          const createdBy = UserService.getUserByDNI(authorization.created_by);
+          const createdFor = UserService.getUserByDNI(authorization.created_for);
+          const values = await Promise.all([createdBy, createdFor]);
+          resolve({ ...authorization, created_by: values[0], created_for: values[1] });
         })
         .catch(() => reject(new Error('Ocurrió un error al obtener la autorización')));
     });

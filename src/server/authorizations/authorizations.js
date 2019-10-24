@@ -10,7 +10,7 @@ router.get('/', (req, res, next) => {
     .catch(err => res.status(err.statusCode ? err.statusCode : 500).json({ error: err.message }));
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   AuthorizationService.getAuthorizationByID(req.params.id)
     .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
 });
