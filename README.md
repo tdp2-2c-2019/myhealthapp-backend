@@ -246,7 +246,7 @@ Response body 404:
     "error": "Doctor not found"
 }
 ```
-
+### Languages
 #### `GET` /api/languages
 Returns all languages.
 
@@ -264,7 +264,7 @@ Response body 200:
     }
 ]
 ```
-
+### Plans
 #### `GET` /api/plans
 Returns all plans.
 
@@ -286,7 +286,7 @@ Response body 200:
     }
 ]
 ```
-
+### Specializations
 #### `GET` /api/specializations
 Returns all specializations.
 
@@ -312,7 +312,7 @@ Response body 200:
     }
 ]
 ```
-
+### Zones
 #### `GET` /api/zones
 Returns all zones.
 
@@ -323,4 +323,83 @@ Response body 200:
     "Belgrano",
     "Saavedra"
 ]
+```
+
+### Authorizations
+#### `GET` /api/authorizations
+Returns all authorizations. If logged in will return only current user authorizations
+
+Response body 200:
+
+```json
+[
+  {
+    "id": 1,
+    "created_by": {
+      "dni": 1,
+      "plan": 1,
+      "first_name": "Diego",
+      "last_name": "Armando",
+      "password": null,
+      "blocked": false,
+      "mail": "diego@mail.com",
+      "token": "",
+      "lat": -33,
+      "lon": -43.2
+    },
+    "created_for": {
+      "dni": 1,
+      "plan": 1,
+      "first_name": "Diego",
+      "last_name": "Armando",
+      "password": null,
+      "blocked": false,
+      "mail": "diego@mail.com",
+      "token": "",
+      "lat": -33,
+      "lon": -43.2
+    },
+    "created_at": "2019-10-24T18:23:38.991Z",
+    "status": "PENDING",
+    "title": "Ortodoncia adultos"
+  }
+]
+```
+
+#### `GET` /api/authorizations/:id
+Returns authorization with given id
+
+Response body 200:
+
+```json
+{
+"id": 1,
+"created_by": {
+    "dni": 1,
+    "plan": 1,
+    "first_name": "Diego",
+    "last_name": "Armando",
+    "password": null,
+    "blocked": false,
+    "mail": "diego@mail.com",
+    "token": "",
+    "lat": -33,
+    "lon": -43.2
+},
+"created_for": {
+    "dni": 1,
+    "plan": 1,
+    "first_name": "Diego",
+    "last_name": "Armando",
+    "password": null,
+    "blocked": false,
+    "mail": "diego@mail.com",
+    "token": "",
+    "lat": -33,
+    "lon": -43.2
+},
+"created_at": "2019-10-24T18:23:38.991Z",
+"status": "PENDING",
+"title": "Ortodoncia adultos"
+}
 ```
