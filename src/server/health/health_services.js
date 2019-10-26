@@ -17,16 +17,13 @@ const getDistanceFilters = (query) => {
 };
 
 const getFilters = (query) => {
-  const filters = { ...query };
-  Object.keys(filters).forEach(key => (filters[key] === undefined || filters[key].localeCompare('') === 0 || key.localeCompare('originLat') === 0 || key.localeCompare('originLon') === 0 || key.localeCompare('distance') === 0) && delete filters[key]);
+  const filters = { minimum_plan: query.minimum_plan, zone: query.zone, name: query.name };
+  Object.keys(filters).forEach(key => (filters[key] === undefined || filters[key].localeCompare('') === 0) && delete filters[key]);
   return filters;
 };
 
-const filterByDistance = (element, filters) => {
-  const { distance } = filters;
-  return (!distance && element.distance < maxDistance)
+const filterByDistance = (element, distance) => (!distance && element.distance < maxDistance)
     || (distance && element.distance < distance);
-};
 
 router.get('/hospitals', (req, res, next) => {
   const filters = getFilters(req.query);
@@ -35,7 +32,7 @@ router.get('/hospitals', (req, res, next) => {
     if (distanceFilters) {
       const filteredHospitals = hospitals
         .map(h => ({ ...h, distance: calculateDistance(distanceFilters.origin, { lon: h.lon, lat: h.lat }) }))
-        .filter(hospital => filterByDistance(hospital, distanceFilters));
+        .filter(hospital => filterByDistance(hospital, distanceFilters.distance));
       res.status(200).send(filteredHospitals);
     } else {
       res.status(200).send(hospitals);
@@ -72,7 +69,7 @@ router.get('/doctors', (req, res, next) => {
       if (distanceFilters) {
         const filteredDoctors = doctors
           .map(d => ({ ...d, distance: calculateDistance(distanceFilters.origin, { lon: d.lon, lat: d.lat }) }))
-          .filter(doctor => filterByDistance(doctor, distanceFilters));
+          .filter(doctor => filterByDistance(doctor, distanceFilters.distance));
         res.status(200).send(filteredDoctors);
       } else {
         res.status(200).send(doctors);
