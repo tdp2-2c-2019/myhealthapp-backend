@@ -30,7 +30,7 @@ class AuthorizationService {
       db.select().from('authorizations')
         .where('id', id)
         .then(async (auth) => {
-          if (auth.length === 0) reject(new NotFoundError('Authorization not found'));
+          if (auth.length === 0) reject(new NotFoundError('Autorización no encontrada'));
           const authorization = auth[0];
           const createdBy = UserService.getUserByDNI(authorization.created_by);
           const createdFor = UserService.getUserByDNI(authorization.created_for);
