@@ -79,10 +79,18 @@ class HealthService {
 
   static getHospitalByID(id) {
     return new Promise((resolve, reject) => {
-      db('hospitals').where('id', id).then((hospital) => {
-        if (hospital.length === 0) reject(new NotFoundError('Hospital not found'));
-        else resolve(hospital[0]);
-      });
+      db('hospitals')
+        .select('hospitals.*', db.raw('array_agg(distinct specializations.name) as specializations'), db.raw('array_agg(distinct languages.name) as languages'))
+        .innerJoin('hospitals_specializations', 'hospitals.id', 'hospitals_specializations.hospital_id')
+        .innerJoin('specializations', 'hospitals_specializations.specialization_id', 'specializations.id')
+        .innerJoin('hospitals_languages', 'hospitals.id', 'hospitals_languages.hospital_id')
+        .innerJoin('languages', 'hospitals_languages.language_id', 'languages.id')
+        .where('hospitals.id', id)
+        .groupBy('hospitals.id')
+        .then((hospital) => {
+          if (hospital.length === 0) reject(new NotFoundError('Hospital not found'));
+          else resolve(hospital[0]);
+        });
     });
   }
 
