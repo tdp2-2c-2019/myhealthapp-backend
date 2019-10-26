@@ -51,6 +51,15 @@ CREATE TABLE IF NOT EXISTS doctors (
     zone VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS authorizations (
+    id SERIAL NOT NULL PRIMARY KEY,
+    created_by INTEGER REFERENCES users(dni),
+    created_for INTEGER REFERENCES users(dni),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(255),
+    title VARCHAR(255)
+);
+
 CREATE TABLE IF NOT EXISTS doctors_specializations (
     doctor_id INTEGER REFERENCES doctors(id),
     specialization_id INTEGER REFERENCES specializations(id),
@@ -124,3 +133,10 @@ INSERT INTO hospitals_languages("hospital_id", "language_id") VALUES
 (1, 2),
 (2, 1),
 (2, 2);
+
+INSERT INTO authorizations("created_by", "created_for", "status", "title") VALUES
+(1, 1, 'PENDING', 'Ortodoncia adultos'),
+(1, 1, 'APPROVED', 'Implante dental'),
+(1, 2, 'PENDING', 'Implante capilar'),
+(2, 2, 'APPROVED', 'Cirugia'),
+(2, 2, 'REJECTED', 'Protesis');
