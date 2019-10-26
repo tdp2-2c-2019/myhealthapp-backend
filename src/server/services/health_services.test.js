@@ -225,7 +225,9 @@ describe('Health Services', () => {
       address_notes: '1 B',
       lat: -33,
       lon: -43.3,
-      zone: 'Saavedra'
+      zone: 'Saavedra',
+      language: ['Español'],
+      specializations: ['Cardiologia', 'Clinica']
     };
     await expect(HealthServices.getDoctorByID(1)).resolves.toStrictEqual(expectedDoctor);
   });

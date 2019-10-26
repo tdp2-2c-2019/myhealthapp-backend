@@ -88,10 +88,18 @@ class HealthService {
 
   static getDoctorByID(id) {
     return new Promise((resolve, reject) => {
-      db('doctors').where('id', id).then((doctor) => {
-        if (doctor.length === 0) reject(new NotFoundError('Doctor not found'));
-        else resolve(doctor[0]);
-      });
+      db('doctors')
+        .select('doctors.*', db.raw('array_agg(distinct specializations.name) as specializations'), db.raw('array_agg(distinct languages.name) as languages'))
+        .innerJoin('doctors_specializations', 'doctors.id', 'doctors_specializations.doctor_id')
+        .innerJoin('specializations', 'doctors_specializations.specialization_id', 'specializations.id')
+        .innerJoin('doctors_languages', 'doctors.id', 'doctors_languages.doctor_id')
+        .innerJoin('languages', 'doctors_languages.language_id', 'languages.id')
+        .where('doctors.id', id)
+        .groupBy('doctors.id')
+        .then((doctor) => {
+          if (doctor.length === 0) reject(new NotFoundError('Doctor not found'));
+          else resolve(doctor[0]);
+        });
     });
   }
 }
