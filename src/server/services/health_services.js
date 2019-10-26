@@ -79,19 +79,35 @@ class HealthService {
 
   static getHospitalByID(id) {
     return new Promise((resolve, reject) => {
-      db('hospitals').where('id', id).then((hospital) => {
-        if (hospital.length === 0) reject(new NotFoundError('Hospital not found'));
-        else resolve(hospital[0]);
-      });
+      db('hospitals')
+        .select('hospitals.*', db.raw('array_agg(distinct specializations.name) as specializations'), db.raw('array_agg(distinct languages.name) as languages'))
+        .innerJoin('hospitals_specializations', 'hospitals.id', 'hospitals_specializations.hospital_id')
+        .innerJoin('specializations', 'hospitals_specializations.specialization_id', 'specializations.id')
+        .innerJoin('hospitals_languages', 'hospitals.id', 'hospitals_languages.hospital_id')
+        .innerJoin('languages', 'hospitals_languages.language_id', 'languages.id')
+        .where('hospitals.id', id)
+        .groupBy('hospitals.id')
+        .then((hospital) => {
+          if (hospital.length === 0) reject(new NotFoundError('Hospital not found'));
+          else resolve(hospital[0]);
+        });
     });
   }
 
   static getDoctorByID(id) {
     return new Promise((resolve, reject) => {
-      db('doctors').where('id', id).then((doctor) => {
-        if (doctor.length === 0) reject(new NotFoundError('Doctor not found'));
-        else resolve(doctor[0]);
-      });
+      db('doctors')
+        .select('doctors.*', db.raw('array_agg(distinct specializations.name) as specializations'), db.raw('array_agg(distinct languages.name) as languages'))
+        .innerJoin('doctors_specializations', 'doctors.id', 'doctors_specializations.doctor_id')
+        .innerJoin('specializations', 'doctors_specializations.specialization_id', 'specializations.id')
+        .innerJoin('doctors_languages', 'doctors.id', 'doctors_languages.doctor_id')
+        .innerJoin('languages', 'doctors_languages.language_id', 'languages.id')
+        .where('doctors.id', id)
+        .groupBy('doctors.id')
+        .then((doctor) => {
+          if (doctor.length === 0) reject(new NotFoundError('Doctor not found'));
+          else resolve(doctor[0]);
+        });
     });
   }
 }

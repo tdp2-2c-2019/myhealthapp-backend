@@ -19,6 +19,7 @@ app.use('/api/plans', require('./plans/plans').default);
 app.use('/api/specializations', require('./specializations/specializations').default);
 app.use('/api/languages', require('./languages/languages').default);
 app.use('/api/zones', require('./zones/zones').default);
+app.use('/api/authorizations', require('./authorizations/authorizations').default);
 
 app.post('/api/login', HandlerGenerator.login);
 

@@ -207,7 +207,9 @@ describe('Health Services', () => {
       address: 'Pueyrredón 1640',
       lat: -33,
       lon: -43.3,
-      zone: 'Parque chas'
+      zone: 'Parque chas',
+      specializations: ['Cardiologia', 'Clinica', 'Dermatologia'],
+      languages: ['Español', 'Ingles']
     };
     await expect(HealthServices.getHospitalByID(1)).resolves.toStrictEqual(expectedHospital);
   });
@@ -225,7 +227,9 @@ describe('Health Services', () => {
       address_notes: '1 B',
       lat: -33,
       lon: -43.3,
-      zone: 'Saavedra'
+      zone: 'Saavedra',
+      languages: ['Español'],
+      specializations: ['Cardiologia', 'Clinica']
     };
     await expect(HealthServices.getDoctorByID(1)).resolves.toStrictEqual(expectedDoctor);
   });

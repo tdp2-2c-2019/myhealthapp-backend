@@ -37,6 +37,18 @@ class UserService {
     });
   }
 
+  static getUserByDNI(dni) {
+    return new Promise((resolve, reject) => {
+      db.select().from('users').where({ dni }).then((rows) => {
+        if (rows.length > 0) {
+          resolve(rows[0]);
+        } else {
+          reject(new NotFoundError('Usuario no encontrado'));
+        }
+      });
+    });
+  }
+
   static createUser(dni, password, mail, firstName, lastName, plan) {
     return new Promise((resolve, reject) => {
       CryptoService.encrypt(password).then((hashedPassword) => {
