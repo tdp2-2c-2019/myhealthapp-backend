@@ -15,6 +15,7 @@
   },
   "author": "tdp2-2c-2019",
   "dependencies": {
+    "@babel/runtime": "^7.6.3",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
@@ -32,6 +33,7 @@
     "@babel/core": "^7.6.0",
     "@babel/node": "^7.6.1",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.0",
