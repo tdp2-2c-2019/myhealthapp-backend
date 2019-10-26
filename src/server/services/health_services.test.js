@@ -228,7 +228,7 @@ describe('Health Services', () => {
       lat: -33,
       lon: -43.3,
       zone: 'Saavedra',
-      language: ['Español'],
+      languages: ['Español'],
       specializations: ['Cardiologia', 'Clinica']
     };
     await expect(HealthServices.getDoctorByID(1)).resolves.toStrictEqual(expectedDoctor);
