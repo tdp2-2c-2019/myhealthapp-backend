@@ -327,7 +327,7 @@ Response body 200:
 
 ### Authorizations
 #### `GET` /api/authorizations
-Returns all authorizations. If logged in will return only current user authorizations
+Returns all authorizations.
 
 Response body 200:
 
