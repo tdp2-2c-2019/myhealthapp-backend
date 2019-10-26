@@ -33,6 +33,7 @@ router.get('/hospitals', (req, res, next) => {
       const filteredHospitals = hospitals
         .map(h => ({ ...h, distance: calculateDistance(distanceFilters.origin, { lon: h.lon, lat: h.lat }) }))
         .filter(hospital => filterByDistance(hospital, distanceFilters.distance));
+      filteredHospitals.sort((a, b) => ((a.distance > b.distance) ? 1 : -1));
       res.status(200).send(filteredHospitals);
     } else {
       res.status(200).send(hospitals);
@@ -70,6 +71,7 @@ router.get('/doctors', (req, res, next) => {
         const filteredDoctors = doctors
           .map(d => ({ ...d, distance: calculateDistance(distanceFilters.origin, { lon: d.lon, lat: d.lat }) }))
           .filter(doctor => filterByDistance(doctor, distanceFilters.distance));
+        filteredDoctors.sort((a, b) => ((a.distance > b.distance) ? 1 : -1));
         res.status(200).send(filteredDoctors);
       } else {
         res.status(200).send(doctors);
