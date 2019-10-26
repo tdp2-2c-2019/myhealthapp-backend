@@ -3,9 +3,7 @@ import AuthorizationService from '../services/authorizations';
 const router = require('express').Router();
 
 router.get('/', (req, res, next) => {
-// TODO: If auth is used return only my authorizations, else return all for admin
-  const dni = req.decoded ? req.decoded : null;
-  AuthorizationService.getAuthorizations(dni)
+  AuthorizationService.getAuthorizations()
     .then(auths => res.send(auths))
     .catch(err => res.status(err.statusCode ? err.statusCode : 500).json({ error: err.message }));
 });
