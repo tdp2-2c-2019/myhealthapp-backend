@@ -5,8 +5,7 @@
   "main": "src/server/index.js",
   "scripts": {
     "build": "webpack --mode production && babel -d ./dist ./src/server",
-    "start": "NODE_ENV=production nodemon --exec babel-node src/server/index.js",
-    "start-deprecated": "npm run build && NODE_ENV=production node ./dist/index.js",
+    "start": "npm run build && NODE_ENV=production node ./dist/index.js",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "server": "nodemon --exec babel-node src/server/index.js",
     "debug": "nodemon --inspect --exec babel-node src/server/index.js",
