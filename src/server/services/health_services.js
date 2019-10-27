@@ -105,8 +105,6 @@ class HealthService {
         .where('doctors.id', id)
         .groupBy('doctors.id')
         .then((doctor) => {
-          console.log(doctor);
-
           if (doctor.length === 0) reject(new NotFoundError('Doctor not found'));
           else resolve(doctor[0]);
         });
