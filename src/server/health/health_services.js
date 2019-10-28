@@ -21,7 +21,7 @@ const getFilters = (query) => {
     minimum_plan: query.minimum_plan,
     zone: query.zone,
     name: query.name,
-    specializations: query.specializations,
+    specializations: query.specialization,
     languages: query.languages
   };
   Object.keys(filters).forEach(key => (filters[key] === undefined || filters[key].localeCompare('') === 0) && delete filters[key]);
