@@ -92,7 +92,7 @@ INSERT INTO plans("plan", "plan_name") VALUES
 INSERT INTO users("dni", "plan", "first_name", "last_name", "password", "blocked", "mail", "token", "lat", "lon") VALUES
 (1, 1, 'Diego', 'Armando', NULL, false, 'diego@mail.com', '', -33.0, -43.2),
 (2, 2, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', '', -37.1, -53.27),
-(38549029, 3, 'Juan Carlos', 'Zapater', NULL, false, -33.0, -43.2);
+(38549029, 3, 'Juan Carlos', 'Zapater', NULL, false, 'jzapater@gmail.com', '', -33.0, -43.2);
 
 INSERT INTO hospitals("minimum_plan", "name", "mail", "telephone", "address", "lat", "lon", "zone") VALUES
 (1, 'Hospital Alemán', 'hospital_aleman@gmail.com', 48277000, 'Av. Pueyrredón 1640, C1118 AAT, Buenos Aires', -34.5885075, -58.4045567, 'Recoleta'),
@@ -113,7 +113,7 @@ INSERT INTO specializations("name") VALUES
 ('Clínica'),
 ('Dermatología'),
 ('Odontología'),
-('Oftamología'),;
+('Oftamología');
 
 INSERT INTO languages("name") VALUES
 ('Español'),
