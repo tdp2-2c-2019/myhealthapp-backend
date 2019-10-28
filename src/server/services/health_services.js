@@ -84,7 +84,7 @@ class HealthService {
         .innerJoin('hospitals_specializations', 'hospitals.id', 'hospitals_specializations.hospital_id')
         .innerJoin('specializations', 'hospitals_specializations.specialization_id', 'specializations.id')
         .innerJoin('hospitals_languages', 'hospitals.id', 'hospitals_languages.hospital_id')
-        .innnerJoin('languages', 'hospitals_languages.language_id', 'languages.id')
+        .innerJoin('languages', 'hospitals_languages.language_id', 'languages.id')
         .where('hospitals.id', id)
         .groupBy('hospitals.id')
         .then((hospital) => {
