@@ -22,7 +22,7 @@ const getFilters = (query) => {
     zone: query.zone,
     name: query.name,
     specializations: query.specialization,
-    languages: query.languages
+    languages: query.language
   };
   Object.keys(filters).forEach(key => (filters[key] === undefined || filters[key].localeCompare('') === 0) && delete filters[key]);
   return filters;
