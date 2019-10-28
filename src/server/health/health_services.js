@@ -12,35 +12,32 @@ const getDistanceFilters = (query) => {
     lat: Number(query.originLat),
     lon: Number(query.originLon)
   };
-  return { distance, origin };
+  if (origin.lat && origin.lon) return { distance, origin };
+  return undefined;
 };
 
 const getFilters = (query) => {
-  const filters = { ...query };
-  Object.keys(filters).forEach(key => (filters[key] === undefined || filters[key].localeCompare('') === 0 || key.localeCompare('originLat') === 0 || key.localeCompare('originLon') === 0) && delete filters[key]);
+  const filters = { minimum_plan: query.minimum_plan, zone: query.zone, name: query.name };
+  Object.keys(filters).forEach(key => (filters[key] === undefined || filters[key].localeCompare('') === 0) && delete filters[key]);
   return filters;
 };
 
-const filterByDistance = (element, filters) => {
-  const {
-    distance, origin
-  } = filters;
-  const destination = {
-    lat: Number(element.lat),
-    lon: Number(element.lon)
-  };
-  // Disable distance filter temporarily
-  return true;
-  // return (!distance && calculateDistance(origin, destination) < maxDistance)
-  //   || (distance && calculateDistance(origin, destination) < distance);
-};
+const filterByDistance = (element, distance) => (!distance && element.distance < maxDistance)
+    || (distance && element.distance < distance);
 
 router.get('/hospitals', (req, res, next) => {
   const filters = getFilters(req.query);
   HealthService.getHospitals(filters).then((hospitals) => {
-    const filteredHospitals = hospitals
-      .filter(hospital => filterByDistance(hospital, getDistanceFilters(req.query)));
-    res.status(200).send(filteredHospitals);
+    const distanceFilters = getDistanceFilters(req.query);
+    if (distanceFilters) {
+      const filteredHospitals = hospitals
+        .map(h => ({ ...h, distance: calculateDistance(distanceFilters.origin, { lon: h.lon, lat: h.lat }) }))
+        .filter(hospital => filterByDistance(hospital, distanceFilters.distance));
+      filteredHospitals.sort((a, b) => ((a.distance > b.distance) ? 1 : -1));
+      res.status(200).send(filteredHospitals);
+    } else {
+      res.status(200).send(hospitals);
+    }
   }).catch(err => next(err));
 });
 
@@ -69,8 +66,16 @@ router.get('/doctors', (req, res, next) => {
   const filters = getFilters(req.query);
   HealthService.getDoctors(filters)
     .then((doctors) => {
-      const filteredDoctors = doctors.filter(doctor => filterByDistance(doctor, getDistanceFilters(req.query)));
-      res.status(200).send(filteredDoctors);
+      const distanceFilters = getDistanceFilters(req.query);
+      if (distanceFilters) {
+        const filteredDoctors = doctors
+          .map(d => ({ ...d, distance: calculateDistance(distanceFilters.origin, { lon: d.lon, lat: d.lat }) }))
+          .filter(doctor => filterByDistance(doctor, distanceFilters.distance));
+        filteredDoctors.sort((a, b) => ((a.distance > b.distance) ? 1 : -1));
+        res.status(200).send(filteredDoctors);
+      } else {
+        res.status(200).send(doctors);
+      }
     }).catch(err => next(err));
 });
 
