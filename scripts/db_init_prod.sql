@@ -149,8 +149,8 @@ INSERT INTO hospitals_languages("hospital_id", "language_id") VALUES
 (6, 1), (6, 2);
 
 INSERT INTO authorizations("created_by", "created_for", "status", "title") VALUES
-('1234567800', '1234567800', 'PENDIENTE', 'Ortodoncia adultos'),
-('1234567800', '1234567801', 'APROBADO', 'Implante dental'),
-('1234567801', '1234567801', 'PENDIENTE', 'Implante capilar'),
-('1234567801', '1234567800', 'APROBADO', 'Cirugía'),
-('1111222200', '1111222200', 'RECHAZADO', 'Prótesis');
+(1, 1, 'PENDIENTE', 'Ortodoncia adultos'),
+(1, 1, 'APROBADO', 'Implante dental'),
+(1, 2, 'PENDIENTE', 'Implante capilar'),
+(2, 2, 'APROBADO', 'Cirugía'),
+(2, 2, 'RECHAZADO', 'Prótesis');
