@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS doctors (
 
 CREATE TABLE IF NOT EXISTS authorizations (
     id SERIAL NOT NULL PRIMARY KEY,
-    created_by CHAR(10) REFERENCES users(affiliate_id),
-    created_for CHAR(10) REFERENCES users(affiliate_id),
+    created_by INTEGER REFERENCES users(dni),
+    created_for INTEGER REFERENCES users(dni),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(255),
     title VARCHAR(255),
