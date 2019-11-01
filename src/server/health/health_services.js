@@ -49,7 +49,12 @@ router.get('/hospitals', (req, res, next) => {
 
 router.get('/hospitals/:id', (req, res, next) => {
   HealthService.getHospitalByID(req.params.id)
-    .then(hospital => res.status(200).send(hospital)).catch(err => next(err));
+    .then(h => res.status(200)
+      .send({
+        ...h,
+        distance: calculateDistance(getDistanceFilters(req.query).origin, { lon: h.lon, lat: h.lat })
+      }))
+    .catch(err => next(err));
 });
 
 router.post('/hospitals', (req, res, next) => {
@@ -65,7 +70,12 @@ router.post('/hospitals', (req, res, next) => {
 
 router.get('/doctors/:id', (req, res, next) => {
   HealthService.getDoctorByID(req.params.id)
-    .then(doctor => res.status(200).send(doctor)).catch(err => next(err));
+    .then(d => res.status(200)
+      .send({
+        ...d,
+        distance: calculateDistance(getDistanceFilters(req.query).origin, { lon: d.lon, lat: d.lat })
+      }))
+    .catch(err => next(err));
 });
 
 router.get('/doctors', (req, res, next) => {
