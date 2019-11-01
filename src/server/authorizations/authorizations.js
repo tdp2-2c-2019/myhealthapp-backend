@@ -15,10 +15,10 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  if (!req.body.created_by || !req.body.created_for || !req.body.title || !req.body.comments) {
+  if (!req.body.created_by || !req.body.created_for || !req.body.title) {
     throw new ValidationError('Datos insuficientes para crear la autorización');
   }
-  AuthorizationService.createAuthorization(req.body.created_by, req.body.created_for, req.body.title, req.body.comments)
+  AuthorizationService.createAuthorization(req.body.created_by, req.body.created_for, req.body.title)
     .then(a => res.status(201).send(a))
     .catch(err => next(err));
 });
