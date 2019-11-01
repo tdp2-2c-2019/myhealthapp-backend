@@ -41,11 +41,19 @@ class AuthorizationService {
     });
   }
 
-  static createAuthorization(createdBy, createdFor, title, comments) {
+  static createAuthorization(created_by, created_for, title, comments) {
+    // FIXME created_at has the wrong date
     return new Promise((resolve, reject) => {
-      db('authorizations').insert(createdBy, createdFor, Date.now(), 'PENDIENTE', title, comments)
+      db('authorizations').insert({
+        created_by,
+        created_for,
+        created_at: db.raw(`to_timestamp(${Date.now()})`),
+        status: 'PENDIENTE',
+        title,
+        comments
+      })
         .returning('*')
-        .then(rows => resolve(rows[0]))
+        .then(rows => resolve(rows))
         .catch(e => reject(e));
     });
   }

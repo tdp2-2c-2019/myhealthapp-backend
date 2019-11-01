@@ -1,4 +1,5 @@
 import AuthorizationService from '../services/authorizations';
+import { ValidationError } from '../errors/errors';
 
 const router = require('express').Router();
 
@@ -11,6 +12,15 @@ router.get('/', (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   AuthorizationService.getAuthorizationByID(req.params.id)
     .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
+});
+
+router.post('/', (req, res, next) => {
+  if (!req.body.created_by || !req.body.created_for || !req.body.title || !req.body.comments) {
+    throw new ValidationError('Datos insuficientes para crear la autorización');
+  }
+  AuthorizationService.createAuthorization(req.body.created_by, req.body.created_for, req.body.title, req.body.comments)
+    .then(a => res.status(201).send(a))
+    .catch(err => next(err));
 });
 
 export default router;
