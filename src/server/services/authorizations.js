@@ -42,7 +42,6 @@ class AuthorizationService {
   }
 
   static createAuthorization(created_by, created_for, title) {
-    // FIXME created_at has the wrong date
     return new Promise((resolve, reject) => {
       db('authorizations').insert({
         created_by,
@@ -51,7 +50,7 @@ class AuthorizationService {
         title
       })
         .returning('*')
-        .then(rows => resolve(rows))
+        .then(rows => resolve(rows[0]))
         .catch(e => reject(e));
     });
   }
