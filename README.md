@@ -403,3 +403,19 @@ Response body 200:
 "title": "Ortodoncia adultos"
 }
 ```
+
+#### `POST` /api/authorizations
+Creates a new authorization.
+
+Response body 201:
+```json
+{
+    "id": 8,
+    "created_by": 1,
+    "created_for": 2,
+    "created_at": "2019-11-01T22:42:12.345Z",
+    "status": "PENDIENTE",
+    "title": "Tomografía",
+    "comments": null
+}
+```
