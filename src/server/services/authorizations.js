@@ -40,6 +40,20 @@ class AuthorizationService {
         .catch(() => reject(new Error('Ocurrió un error al obtener la autorización')));
     });
   }
+
+  static createAuthorization(created_by, created_for, title) {
+    return new Promise((resolve, reject) => {
+      db('authorizations').insert({
+        created_by,
+        created_for,
+        status: 'PENDIENTE',
+        title
+      })
+        .returning('*')
+        .then(rows => resolve(rows[0]))
+        .catch(e => reject(e));
+    });
+  }
 }
 
 export default AuthorizationService;
