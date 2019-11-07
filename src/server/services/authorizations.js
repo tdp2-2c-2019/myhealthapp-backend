@@ -48,7 +48,7 @@ class AuthorizationService {
         .update({ status: data.status, note: data.note, updated_at: new Date() }, ['*'])
         .then(async (auth) => {
           if (auth.length === 0) reject(new NotFoundError('Autorización no encontrada'));
-          resolve(this.getAuthorizationByID(id));
+          else resolve(this.getAuthorizationByID(id));
         })
         .catch(() => reject(new Error('Ocurrió un error al obtener la autorización')));
     });
