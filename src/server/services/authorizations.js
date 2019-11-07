@@ -45,7 +45,7 @@ class AuthorizationService {
     return new Promise((resolve, reject) => {
       db('authorizations')
         .where('id', id)
-        .update({ status: data.status, note: data.note }, ['*'])
+        .update({ status: data.status, note: data.note, updated_at: new Date() }, ['*'])
         .then(async (auth) => {
           if (auth.length === 0) reject(new NotFoundError('Autorización no encontrada'));
           resolve(this.getAuthorizationByID(id));
