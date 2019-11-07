@@ -14,6 +14,14 @@ router.get('/:id', async (req, res, next) => {
     .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
 });
 
+router.put('/:id', async (req, res, next) => {
+  if (!req.body.status) {
+    throw new ValidationError('Datos insuficientes para actualizar la autorización, se necesita el estado');
+  }
+  AuthorizationService.putAuthorizationByID(req.params.id, req.body)
+    .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
+});
+
 router.post('/', (req, res, next) => {
   if (!req.body.created_by || !req.body.created_for || !req.body.title) {
     throw new ValidationError('Datos insuficientes para crear la autorización');

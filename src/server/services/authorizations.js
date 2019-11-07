@@ -41,6 +41,19 @@ class AuthorizationService {
     });
   }
 
+  static putAuthorizationByID(id, data) {
+    return new Promise((resolve, reject) => {
+      db('authorizations')
+        .where('id', id)
+        .update({ status: data.status, note: data.note }, ['*'])
+        .then(async (auth) => {
+          if (auth.length === 0) reject(new NotFoundError('Autorización no encontrada'));
+          resolve(this.getAuthorizationByID(id));
+        })
+        .catch(() => reject(new Error('Ocurrió un error al obtener la autorización')));
+    });
+  }
+
   static createAuthorization(created_by, created_for, title) {
     return new Promise((resolve, reject) => {
       db('authorizations').insert({
