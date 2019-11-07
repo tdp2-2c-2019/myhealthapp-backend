@@ -57,7 +57,8 @@ CREATE TABLE IF NOT EXISTS authorizations (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(255),
     title VARCHAR(255),
-    comments VARCHAR(255)
+    note VARCHAR(255) DEFAULT '',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS doctors_specializations (
