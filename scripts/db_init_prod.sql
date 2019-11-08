@@ -61,6 +61,13 @@ CREATE TABLE IF NOT EXISTS authorizations (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS authorizations_history (
+    authorization_id INTEGER REFERENCES authorizations(id),
+    note VARCHAR(255),
+    status VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS doctors_specializations (
     doctor_id INTEGER REFERENCES doctors(id),
     specialization_id INTEGER REFERENCES specializations(id),

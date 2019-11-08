@@ -86,6 +86,13 @@ CREATE TABLE IF NOT EXISTS hospitals_languages (
     PRIMARY KEY (hospital_id, language_id)
 );
 
+CREATE TABLE IF NOT EXISTS authorizations_history(
+    authorization_id INTEGER REFERENCES authorizations(id),
+    note VARCHAR(255),
+    status VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 INSERT INTO plans("plan", "plan_name") VALUES 
 (1, 'Plan 1'), 
 (2, 'Plan 2'), 
