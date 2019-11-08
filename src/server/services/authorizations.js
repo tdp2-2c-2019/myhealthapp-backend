@@ -92,7 +92,10 @@ class AuthorizationService {
     return new Promise((resolve, reject) => {
       db.select().from('authorizations_history')
         .where('authorization_id', id)
-        .then(rows => resolve(rows))
+        .then((rows) => {
+          if (rows.length == 0) reject(new NotFoundError('Autorización no encontrada'));
+          else resolve(rows);
+        })
         .catch(() => reject(new Error('Ocurrió un error al obtener el historial para la autorización')));
     });
   }
