@@ -14,12 +14,18 @@ router.get('/:id', async (req, res, next) => {
     .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
 });
 
+router.get('/:id/history', async (req, res, next) => {
+  AuthorizationService.getAuthorizationHistoryByID(req.params.id)
+    .then(history => res.status(200).send(history))
+    .catch(err => next(err));
+});
+
 router.put('/:id', async (req, res, next) => {
   if (!req.body.status) {
-    next(new ValidationError('Datos insuficientes para actualizar la autorización, se necesita el estado'))
+    next(new ValidationError('Datos insuficientes para actualizar la autorización, se necesita el estado'));
   } else {
     AuthorizationService.putAuthorizationByID(req.params.id, req.body)
-      .then(authorization => res.status(200).send(authorization)).catch(err => next(err)); 
+      .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
   }
 });
 

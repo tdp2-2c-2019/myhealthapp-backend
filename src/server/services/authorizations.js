@@ -47,24 +47,53 @@ class AuthorizationService {
         .where('id', id)
         .update({ status: data.status, note: data.note, updated_at: new Date() }, ['*'])
         .then(async (auth) => {
-          if (auth.length === 0) reject(new NotFoundError('Autorización no encontrada'));
-          else resolve(this.getAuthorizationByID(id));
+          if (auth.length === 0) reject(new Error('Ocurrió un error al actualizar la autorización'));
+          else {
+            this.saveAuthorizationChangeOnHistory(id, data.note, data.status)
+              .then(resolve(this.getAuthorizationByID(id)))
+              .catch(reject(new Error('Ocurrió un error al actualizar la autorización')));
+          }
         })
-        .catch(() => reject(new Error('Ocurrió un error al obtener la autorización')));
+        .catch(() => reject(new Error('Ocurrió un error al actualizar la autorización')));
     });
   }
 
-  static createAuthorization(created_by, created_for, title) {
+  static createAuthorization(createdBy, createdFor, title) {
     return new Promise((resolve, reject) => {
       db('authorizations').insert({
-        created_by,
-        created_for,
+        created_by: createdBy,
+        created_for: createdFor,
         status: 'PENDIENTE',
         title
       })
         .returning('*')
-        .then(rows => resolve(rows[0]))
+        .then((rows) => {
+          const authorization = rows[0];
+          this.saveAuthorizationChangeOnHistory(authorization.id, '', authorization.status)
+            .then(resolve(authorization))
+            .catch(e => reject(e));
+        })
         .catch(e => reject(e));
+    });
+  }
+
+  static saveAuthorizationChangeOnHistory(id, note, status) {
+    return new Promise((resolve, reject) => {
+      db('authorizations_history').insert({
+        authorization_id: id,
+        note,
+        status
+      }).then(resolve())
+        .catch(e => reject(e));
+    });
+  }
+
+  static getAuthorizationHistoryByID(id) {
+    return new Promise((resolve, reject) => {
+      db.select().from('authorizations_history')
+        .where('authorization_id', id)
+        .then(rows => resolve(rows))
+        .catch(() => reject(new Error('Ocurrió un error al obtener el historial para la autorización')));
     });
   }
 }
