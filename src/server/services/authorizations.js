@@ -47,7 +47,7 @@ class AuthorizationService {
         .where('id', id)
         .update({ status: data.status, note: data.note, updated_at: new Date() }, ['*'])
         .then(async (auth) => {
-          if (auth.length === 0) reject(new Error('Ocurrió un error al actualizar la autorización'));
+          if (auth.length === 0) reject(new NotFoundError('Autorización no encontrada'));
           else {
             this.saveAuthorizationChangeOnHistory(id, data.note, data.status)
               .then(resolve(this.getAuthorizationByID(id)))
