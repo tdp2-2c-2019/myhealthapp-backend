@@ -94,6 +94,20 @@ class UserService {
         });
     });
   }
+
+  static getUserFamilyGroup(dni) {
+    return new Promise((resolve, reject) => {
+      db.select('affiliate_id').from('users').where('dni', dni)
+        .then((users) => {
+          if (users.length === 0) reject(new NotFoundError('Afiliado no encontrado'));
+          else {
+            db.select('dni', 'affiliate_id', 'first_name', 'last_name').from('users').where('affiliate_id', 'like', `${users[0].affiliate_id.slice(0, 8)}__`)
+              .then(resolve);
+          }
+        })
+        .catch(err => reject(new Error(`Ocurrió un error al obtener el grupo familiar del afiliado: ${err}`)));
+    });
+  }
 }
 
 export default UserService;
