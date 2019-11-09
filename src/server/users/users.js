@@ -58,4 +58,10 @@ router.put('/password', (req, res, next) => {
   }).catch(err => res.status(err.statusCode).json({ message: err.message }));
 });
 
+router.get('/:id/family-group', (req, res, next) => {
+  UserService.getUserFamilyGroup(req.params.id)
+    .then(users => res.status(200).json(users))
+    .catch(err => next(err));
+});
+
 export default router;
