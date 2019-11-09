@@ -43,7 +43,8 @@ export class HandlerGenerator {
         // return the JWT token for the future API calls
         res.json({
           message: 'Autenticación exitosa',
-          token
+          token,
+          dni
         });
       })
       .catch(e => next(e));
