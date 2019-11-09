@@ -98,10 +98,10 @@ class UserService {
   static getUserFamilyGroup(dni) {
     return new Promise((resolve, reject) => {
       db.select('affiliate_id').from('users').where('dni', dni)
-        .then((userId) => {
-          if (userId.length === 0) reject(new NotFoundError('Afiliado no encontrado'));
+        .then((users) => {
+          if (users.length === 0) reject(new NotFoundError('Afiliado no encontrado'));
           else {
-            db.select().from('users').where('affiliate_id', 'like', `${userId[0].affiliate_id.slice(0, 8)}__`)
+            db.select('dni', 'affiliate_id', 'first_name', 'last_name').from('users').where('affiliate_id', 'like', `${users[0].affiliate_id.slice(0, 8)}__`)
               .then(resolve);
           }
         })
