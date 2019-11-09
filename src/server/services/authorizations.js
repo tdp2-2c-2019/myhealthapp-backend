@@ -41,6 +41,19 @@ class AuthorizationService {
     });
   }
 
+  static getUserFamilyGroup(id) {
+    return new Promise((resolve, reject) => {
+      db.select('affiliate_id').from('users').where(id)
+        .then((userId) => {
+          if (userId.length === 0) reject(new NotFoundError('Afiliado no encontrada'));
+          else {
+            db.select().from('users').where('affiliate_id', 'like', `${userId.slice(0, 7)}%`).then(resolve);
+          }
+        })
+        .catch(() => reject(new Error('Ocurrió un error al obtener el grupo familiar del afiliado')));
+    });
+  }
+
   static putAuthorizationByID(id, data) {
     return new Promise((resolve, reject) => {
       db('authorizations')
