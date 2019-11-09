@@ -113,6 +113,40 @@ Expected body:
 
 Response status: 200
 
+##### `GET`/api/users/:dni/family-group
+
+Returns a user family group.
+
+Auth: Yes
+
+Expected body:
+```json
+[
+    {
+        "dni": 1,
+        "affiliate_id": "1234567800",
+        "plan": 1,
+        "first_name": "Diego",
+        "last_name": "Armando",
+        "password": null,
+        "blocked": false,
+        "mail": "diego@mail.com",
+        "token": ""
+    },
+    {
+        "dni": 2,
+        "affiliate_id": "1234567801",
+        "plan": 2,
+        "first_name": "Claudio",
+        "last_name": "Paul",
+        "password": null,
+        "blocked": false,
+        "mail": "claudio@paul.com",
+        "token": ""
+    }
+]
+```
+
 ### Health Services
 #### `GET` /api/health-services
 Returns all hospitals and doctors.
