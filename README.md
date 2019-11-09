@@ -32,7 +32,7 @@ Expected body:
 
 ```json
     {
-        "dni": "99",
+        "dni": 99,
         "password": "password"
     }
 ```
@@ -44,7 +44,8 @@ Response body 200:
 ```json
     {
         "message": "Authentication successful!",
-        "token": "your_super_secret_token"
+        "token": "your_super_secret_token",
+        "dni": 99
     }
 ```
 
