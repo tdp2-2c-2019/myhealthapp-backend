@@ -9,6 +9,22 @@ router.get('/', (req, res, next) => {
     .catch(err => res.status(err.statusCode ? err.statusCode : 500).json({ error: err.message }));
 });
 
+router.get('/types', (req, res, next) => {
+  AuthorizationService.getTypes()
+    .then(types => res.status(200).send(types))
+    .catch(err => next(err));
+});
+
+router.post('/types', (req, res, next) => {
+  if (!req.body.title) {
+    next(new ValidationError('Datos insuficientes para crear el tipo de autorización'));
+  } else {
+    AuthorizationService.createType(req.body.title)
+      .then(type => res.status(200).send(type))
+      .catch(err => next(err));
+  }
+});
+
 router.get('/:id', async (req, res, next) => {
   AuthorizationService.getAuthorizationByID(req.params.id)
     .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
@@ -34,7 +50,7 @@ router.post('/', (req, res, next) => {
     next(new ValidationError('Datos insuficientes para crear la autorización'));
   } else {
     AuthorizationService.createAuthorization(req.body.created_by, req.body.created_for, req.body.title)
-      .then(a => res.status(201).send(a))
+      .then(auth => res.status(201).send(auth))
       .catch(err => next(err));
   }
 });
