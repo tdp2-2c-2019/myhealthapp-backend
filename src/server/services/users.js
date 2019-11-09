@@ -95,9 +95,9 @@ class UserService {
     });
   }
 
-  static getUserFamilyGroup(id) {
+  static getUserFamilyGroup(dni) {
     return new Promise((resolve, reject) => {
-      db.select('affiliate_id').from('users').where('dni', id)
+      db.select('affiliate_id').from('users').where('dni', dni)
         .then((userId) => {
           if (userId.length === 0) reject(new NotFoundError('Afiliado no encontrado'));
           else {
