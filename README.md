@@ -441,6 +441,16 @@ Response body 200:
 #### `POST` /api/authorizations
 Creates a new authorization.
 
+Request body:
+```json
+```json
+{
+    "created_by": 1,
+    "created_for": 2,
+    "title": "Tomografía"
+}
+```
+
 Response body 201:
 ```json
 {
@@ -450,6 +460,6 @@ Response body 201:
     "created_at": "2019-11-01T22:42:12.345Z",
     "status": "PENDIENTE",
     "title": "Tomografía",
-    "comments": null
+    "note": null
 }
 ```
