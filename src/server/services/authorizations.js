@@ -11,6 +11,7 @@ class AuthorizationService {
             queryBuilder.where('created_by', dni).orWhere('created_for', dni);
           }
         })
+        .orderBy('id')
         .then(async (rows) => {
           resolve(await Promise.all(rows.map(async (authorization) => {
             const createdBy = UserService.getUserByDNI(authorization.created_by);
