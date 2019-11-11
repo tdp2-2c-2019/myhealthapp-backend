@@ -13,7 +13,7 @@ const getDistanceFilters = (query) => {
     lon: Number(query.originLon)
   };
   if (origin.lat && origin.lon) return { distance, origin };
-  return {};
+  return undefined;
 };
 
 const getFilters = (query) => {
@@ -85,7 +85,7 @@ router.get('/doctors/:id', (req, res, next) => {
             distance: -1
           });
       }
-    }    )
+    } )
     .catch(err => next(err));
 });
 
