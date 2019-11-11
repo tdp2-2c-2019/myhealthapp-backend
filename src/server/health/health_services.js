@@ -9,8 +9,8 @@ const maxDistance = 0.5;
 const getDistanceFilters = (query) => {
   const { distance } = query;
   const origin = {
-    lat: Number(query.originLat),
-    lon: Number(query.originLon)
+    lat: Number(query.originLat ? query.originLat : 0),
+    lon: Number(query.originLon ? query.originLon : 0)
   };
   if (origin.lat && origin.lon) return { distance, origin };
   return undefined;
