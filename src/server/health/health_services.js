@@ -9,11 +9,11 @@ const maxDistance = 0.5;
 const getDistanceFilters = (query) => {
   const { distance } = query;
   const origin = {
-    lat: Number(query.originLat ? query.originLat : 0),
-    lon: Number(query.originLon ? query.originLon : 0)
+    lat: Number(query.originLat),
+    lon: Number(query.originLon)
   };
   if (origin.lat && origin.lon) return { distance, origin };
-  return undefined;
+  return {};
 };
 
 const getFilters = (query) => {
@@ -70,11 +70,22 @@ router.post('/hospitals', (req, res, next) => {
 
 router.get('/doctors/:id', (req, res, next) => {
   HealthService.getDoctorByID(req.params.id)
-    .then(d => res.status(200)
-      .send({
-        ...d,
-        distance: calculateDistance(getDistanceFilters(req.query).origin, { lon: d.lon, lat: d.lat })
-      }))
+    .then((d) => {
+      const distanceFilter = getDistanceFilters(req.query);
+      if (distanceFilter) {
+        res.status(200)
+          .send({
+            ...d,
+            distance: calculateDistance(distanceFilter.origin, { lon: d.lon, lat: d.lat })
+          });
+      } else {
+        res.status(200)
+          .send({
+            ...d,
+            distance: -1
+          });
+      }
+    }    )
     .catch(err => next(err));
 });
 
