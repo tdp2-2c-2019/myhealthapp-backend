@@ -32,7 +32,7 @@ Expected body:
 
 ```json
     {
-        "dni": "99",
+        "dni": 99,
         "password": "password"
     }
 ```
@@ -44,7 +44,8 @@ Response body 200:
 ```json
     {
         "message": "Authentication successful!",
-        "token": "your_super_secret_token"
+        "token": "your_super_secret_token",
+        "dni": 99
     }
 ```
 
@@ -441,6 +442,16 @@ Response body 200:
 #### `POST` /api/authorizations
 Creates a new authorization.
 
+Request body:
+```json
+```json
+{
+    "created_by": 1,
+    "created_for": 2,
+    "title": "Tomografía"
+}
+```
+
 Response body 201:
 ```json
 {
@@ -450,6 +461,6 @@ Response body 201:
     "created_at": "2019-11-01T22:42:12.345Z",
     "status": "PENDIENTE",
     "title": "Tomografía",
-    "comments": null
+    "note": null
 }
 ```
