@@ -100,6 +100,25 @@ class AuthorizationService {
         .catch(() => reject(new Error('Ocurrió un error al obtener el historial para la autorización')));
     });
   }
+
+  static getSummarizedInfo() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const authorizedCountPerDay = await db.raw("select count(*) as status_count, extract(DAY from date_trunc('day', updated_at)) as day from authorizations where updated_at >= NOW() - interval '30 days' and status = 'APROBADO' group by date_trunc('day', updated_at) order by day");
+        const rejectedCountPerDay = await db.raw("select count(*) as status_count, extract(DAY from date_trunc('day', updated_at)) as day from authorizations where updated_at >= NOW() - interval '30 days' and status = 'RECHAZADO' group by date_trunc('day', updated_at) order by day");
+        const automaticApprovedCount = await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'SYSTEM'");
+        const manualApprovedCount = await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'MANUAL'");
+        resolve({
+          authorized_count_per_day: authorizedCountPerDay.rows,
+          rejected_count_per_day: rejectedCountPerDay.rows,
+          automatic_approved_count: automaticApprovedCount.rows[0].count,
+          manual_approved_count: manualApprovedCount.rows[0].count
+        });
+      } catch (err) {
+        reject(new Error('Ocurrió un error al obtener los datos sumarizados para autorizaciones'));
+      }
+    });
+  }
 }
 
 export default AuthorizationService;
