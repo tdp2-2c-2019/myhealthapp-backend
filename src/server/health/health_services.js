@@ -49,11 +49,22 @@ router.get('/hospitals', (req, res, next) => {
 
 router.get('/hospitals/:id', (req, res, next) => {
   HealthService.getHospitalByID(req.params.id)
-    .then(h => res.status(200)
-      .send({
-        ...h,
-        distance: calculateDistance(getDistanceFilters(req.query).origin, { lon: h.lon, lat: h.lat })
-      }))
+    .then((h) => {
+      const distanceFilter = getDistanceFilters(req.query);
+      if (distanceFilter) {
+        res.status(200)
+          .send({
+            ...h,
+            distance: calculateDistance(distanceFilter.origin, { lon: h.lon, lat: h.lat })
+          });
+      } else {
+        res.status(200)
+          .send({
+            ...h,
+            distance: -1
+          });
+      }
+    })
     .catch(err => next(err));
 });
 
@@ -70,11 +81,22 @@ router.post('/hospitals', (req, res, next) => {
 
 router.get('/doctors/:id', (req, res, next) => {
   HealthService.getDoctorByID(req.params.id)
-    .then(d => res.status(200)
-      .send({
-        ...d,
-        distance: calculateDistance(getDistanceFilters(req.query).origin, { lon: d.lon, lat: d.lat })
-      }))
+    .then((d) => {
+      const distanceFilter = getDistanceFilters(req.query);
+      if (distanceFilter) {
+        res.status(200)
+          .send({
+            ...d,
+            distance: calculateDistance(distanceFilter.origin, { lon: d.lon, lat: d.lat })
+          });
+      } else {
+        res.status(200)
+          .send({
+            ...d,
+            distance: -1
+          });
+      }
+    })
     .catch(err => next(err));
 });
 
