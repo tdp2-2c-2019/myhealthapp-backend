@@ -104,17 +104,46 @@ class AuthorizationService {
   static getSummarizedInfo() {
     return new Promise(async (resolve, reject) => {
       try {
-        const authorizedCountPerDay = await db.raw("select count(*) as status_count, extract(DAY from date_trunc('day', updated_at)) as day from authorizations where updated_at >= NOW() - interval '30 days' and status = 'APROBADO' group by date_trunc('day', updated_at) order by day");
-        const rejectedCountPerDay = await db.raw("select count(*) as status_count, extract(DAY from date_trunc('day', updated_at)) as day from authorizations where updated_at >= NOW() - interval '30 days' and status = 'RECHAZADO' group by date_trunc('day', updated_at) order by day");
-        const automaticApprovedCount = await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'SYSTEM'");
-        const manualApprovedCount = await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'MANUAL'");
+        const authorizedCountPerDay = (await db.raw("select count(*) as status_count, date_trunc('day', updated_at) as date from authorizations where updated_at >= NOW() - interval '30 days' and status = 'APROBADO' group by updated_at order by date")).rows;
+        const rejectedCountPerDay = (await db.raw("select count(*) as status_count, date_trunc('day', updated_at) as date from authorizations where updated_at >= NOW() - interval '30 days' and status = 'RECHAZADO' group by updated_at order by date")).rows;
+        const automaticApprovedCount = (await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'SYSTEM'")).rows[0].count;
+        const manualApprovedCount = (await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'MANUAL'")).rows[0].count;
+
+        const date = new Date();
+        date.setDate(date.getDate() - 30);
+        const now = new Date();
+        const past30days = [];
+        for (let d = date; d <= now; d.setDate(d.getDate() + 1)) {
+          const b = new Date(d);
+          b.setHours(0, 0, 0, 0);
+          past30days.push(b);
+        }
+
+        const a = past30days.map((day) => {
+          const e = authorizedCountPerDay.find(acpd => acpd.date.toISOString() === day.toISOString());
+          if (e) {
+            return e;
+          }
+          return { status_count: '0', date: day };
+        });
+
+        const b = past30days.map((day) => {
+          const e = rejectedCountPerDay.find(rcpd => rcpd.date.toISOString() === day.toISOString());
+          if (e) {
+            return e;
+          }
+          return { status_count: '0', date: day };
+        });
+
         resolve({
-          authorized_count_per_day: authorizedCountPerDay.rows,
-          rejected_count_per_day: rejectedCountPerDay.rows,
-          automatic_approved_count: automaticApprovedCount.rows[0].count,
-          manual_approved_count: manualApprovedCount.rows[0].count
+          authorized_count_per_day: a,
+          rejected_count_per_day: b,
+          automatic_approved_count: automaticApprovedCount,
+          manual_approved_count: manualApprovedCount
         });
       } catch (err) {
+        console.error(err);
+
         reject(new Error('Ocurrió un error al obtener los datos sumarizados para autorizaciones'));
       }
     });
