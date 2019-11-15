@@ -100,6 +100,23 @@ class AuthorizationService {
         .catch(() => reject(new Error('Ocurrió un error al obtener el historial para la autorización')));
     });
   }
+
+  static getTypes() {
+    return new Promise((resolve, reject) => {
+      db.select().from('authorizations_types')
+        .then(rows => resolve(rows))
+        .catch(() => reject(new Error('Ocurrió un error al obtener los tipos de autorizaciones')));
+    });
+  }
+
+  static createType(title) {
+    return new Promise((resolve, reject) => {
+      db('authorizations_types').insert({
+        title
+      }).then(resolve())
+        .catch(e => reject(e));
+    });
+  }
 }
 
 export default AuthorizationService;
