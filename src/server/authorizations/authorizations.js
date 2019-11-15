@@ -16,7 +16,7 @@ router.get('/types', (req, res, next) => {
 });
 
 router.post('/types', (req, res, next) => {
-  if (!req.body.title) {
+  if (!req.body.title || !req.body.minimum_plan) {
     next(new ValidationError('Datos insuficientes para crear el tipo de autorización'));
   } else {
     AuthorizationService.createType(req.body.title)

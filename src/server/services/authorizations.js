@@ -122,10 +122,11 @@ class AuthorizationService {
     });
   }
 
-  static createType(title) {
+  static createType(title, minimumPlan) {
     return new Promise((resolve, reject) => {
       db('authorizations_types').insert({
-        title
+        title,
+        minimum_plan: minimumPlan
       }).then(resolve())
         .catch(e => reject(e));
     });

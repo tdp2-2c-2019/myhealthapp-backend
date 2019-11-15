@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS authorizations_history(
 
 CREATE TABLE IF NOT EXISTS authorizations_types(
     id SERIAL NOT NULL PRIMARY KEY,
+    minimum_plan INTEGER REFERENCES plans(plan),
     title VARCHAR(255)
 );
 
@@ -156,7 +157,9 @@ INSERT INTO authorizations("created_by", "created_for", "status", "title") VALUE
 (2, 2, 'APPROVED', 'Cirugia'),
 (2, 2, 'REJECTED', 'Protesis');
 
-INSERT INTO authorizations_types("title") VALUES
-('Implante'),
-('Operación'),
-('Rayos');
+INSERT INTO authorizations_types
+    ("minimum_plan", "title")
+VALUES
+    (3, 'Implante'),
+    (2, 'Operación'),
+    (1, 'Rayos');

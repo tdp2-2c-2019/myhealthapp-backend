@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS hospitals_languages (
 
 CREATE TABLE IF NOT EXISTS authorizations_types(
     id SERIAL NOT NULL PRIMARY KEY,
+    minimum_plan INTEGER REFERENCES plans(plan),
     title VARCHAR(255)
 );
 
@@ -171,8 +172,8 @@ INSERT INTO authorizations("created_by", "created_for", "status", "title") VALUE
 (2, 2, 'RECHAZADO', 'Prótesis');
 
 INSERT INTO authorizations_types
-    ("title")
+    ("minimum_plan", "title")
 VALUES
-    ('Implante'),
-    ('Operación'),
-    ('Rayos');
+    (3, 'Implante'),
+    (2, 'Operación'),
+    (1, 'Rayos');
