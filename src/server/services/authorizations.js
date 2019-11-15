@@ -2,6 +2,19 @@ import { db } from '../db';
 import { NotFoundError } from '../errors/errors';
 import UserService from './users';
 
+const getPast30Days = () => {
+  const date = new Date();
+  date.setDate(date.getDate() - 30);
+  const now = new Date();
+  const past30days = [];
+  for (let d = date; d <= now; d.setDate(d.getDate() + 1)) {
+    const b = new Date(d);
+    b.setHours(0, 0, 0, 0);
+    past30days.push(b);
+  }
+  return past30days;
+};
+
 class AuthorizationService {
   static getAuthorizations(dni) {
     return new Promise((resolve, reject) => {
@@ -109,35 +122,21 @@ class AuthorizationService {
         const automaticApprovedCount = (await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'SYSTEM'")).rows[0].count;
         const manualApprovedCount = (await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'MANUAL'")).rows[0].count;
 
-        const date = new Date();
-        date.setDate(date.getDate() - 30);
-        const now = new Date();
-        const past30days = [];
-        for (let d = date; d <= now; d.setDate(d.getDate() + 1)) {
-          const b = new Date(d);
-          b.setHours(0, 0, 0, 0);
-          past30days.push(b);
-        }
+        const past30days = getPast30Days();
 
-        const a = past30days.map((day) => {
-          const e = authorizedCountPerDay.find(acpd => acpd.date.toISOString() === day.toISOString());
-          if (e) {
-            return e;
-          }
-          return { status_count: '0', date: day };
+        const authorizedCountForAllLast30Days = past30days.map((day) => {
+          const existingAuthorizedCountForDay = authorizedCountPerDay.find(acpd => acpd.date.toISOString() === day.toISOString());
+          return existingAuthorizedCountForDay || { status_count: '0', date: day };
         });
 
-        const b = past30days.map((day) => {
-          const e = rejectedCountPerDay.find(rcpd => rcpd.date.toISOString() === day.toISOString());
-          if (e) {
-            return e;
-          }
-          return { status_count: '0', date: day };
+        const rejectedCountForAllLast30Days = past30days.map((day) => {
+          const existingRejectedCountForDay = rejectedCountPerDay.find(rcpd => rcpd.date.toISOString() === day.toISOString());
+          return existingRejectedCountForDay || { status_count: '0', date: day };
         });
 
         resolve({
-          authorized_count_per_day: a,
-          rejected_count_per_day: b,
+          authorized_count_per_day: authorizedCountForAllLast30Days,
+          rejected_count_per_day: rejectedCountForAllLast30Days,
           automatic_approved_count: automaticApprovedCount,
           manual_approved_count: manualApprovedCount
         });
