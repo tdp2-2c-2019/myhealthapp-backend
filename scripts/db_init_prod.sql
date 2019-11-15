@@ -93,6 +93,12 @@ CREATE TABLE IF NOT EXISTS hospitals_languages (
     PRIMARY KEY (hospital_id, language_id)
 );
 
+CREATE TABLE IF NOT EXISTS authorizations_types(
+    id SERIAL NOT NULL PRIMARY KEY,
+    title VARCHAR(255)
+);
+
+
 INSERT INTO plans("plan", "plan_name") VALUES 
 (1, 'Plan 1'), 
 (2, 'Plan 2'), 
@@ -163,3 +169,10 @@ INSERT INTO authorizations("created_by", "created_for", "status", "title") VALUE
 (1, 2, 'PENDIENTE', 'Implante capilar'),
 (2, 2, 'APROBADO', 'Cirugía'),
 (2, 2, 'RECHAZADO', 'Prótesis');
+
+INSERT INTO authorizations_types
+    ("title")
+VALUES
+    ('Implante'),
+    ('Operación'),
+    ('Rayos');

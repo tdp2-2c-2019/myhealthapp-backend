@@ -94,6 +94,11 @@ CREATE TABLE IF NOT EXISTS authorizations_history(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS authorizations_types(
+    id SERIAL NOT NULL PRIMARY KEY,
+    title VARCHAR(255)
+);
+
 INSERT INTO plans("plan", "plan_name") VALUES 
 (1, 'Plan 1'), 
 (2, 'Plan 2'), 
@@ -150,3 +155,8 @@ INSERT INTO authorizations("created_by", "created_for", "status", "title") VALUE
 (1, 2, 'PENDING', 'Implante capilar'),
 (2, 2, 'APPROVED', 'Cirugia'),
 (2, 2, 'REJECTED', 'Protesis');
+
+INSERT INTO authorizations_types("title") VALUES
+('Implante'),
+('Operación'),
+('Rayos');

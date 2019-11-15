@@ -114,6 +114,23 @@ class AuthorizationService {
     });
   }
 
+  static getTypes() {
+    return new Promise((resolve, reject) => {
+      db.select().from('authorizations_types')
+        .then(rows => resolve(rows))
+        .catch(() => reject(new Error('Ocurrió un error al obtener los tipos de autorizaciones')));
+    });
+  }
+
+  static createType(title) {
+    return new Promise((resolve, reject) => {
+      db('authorizations_types').insert({
+        title
+      }).then(resolve())
+        .catch(e => reject(e));
+    });
+  }
+
   static getSummarizedInfo() {
     return new Promise(async (resolve, reject) => {
       try {
