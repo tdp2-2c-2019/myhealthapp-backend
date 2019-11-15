@@ -158,8 +158,6 @@ class AuthorizationService {
           manual_approved_count: manualApprovedCount
         });
       } catch (err) {
-        console.error(err);
-
         reject(new Error('Ocurrió un error al obtener los datos sumarizados para autorizaciones'));
       }
     });
