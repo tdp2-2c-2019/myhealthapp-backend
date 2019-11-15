@@ -108,6 +108,14 @@ class UserService {
         .catch(err => reject(new Error(`Ocurrió un error al obtener el grupo familiar del afiliado: ${err}`)));
     });
   }
+
+  static getSummarizedInfo() {
+    return new Promise((resolve, reject) => {
+      db.select('plan', db.raw('COUNT(plan) AS count')).from('users').groupBy('plan')
+        .then(resolve)
+        .catch(err => reject(new Error(`Ocurrió un error al obtener los datos sumarizados de usuarios: ${err}`)));
+    });
+  }
 }
 
 export default UserService;

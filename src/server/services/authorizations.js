@@ -2,6 +2,19 @@ import { db } from '../db';
 import { NotFoundError } from '../errors/errors';
 import UserService from './users';
 
+const getPast30Days = () => {
+  const date = new Date();
+  date.setDate(date.getDate() - 30);
+  const now = new Date();
+  const past30days = [];
+  for (let d = date; d <= now; d.setDate(d.getDate() + 1)) {
+    const b = new Date(d);
+    b.setHours(0, 0, 0, 0);
+    past30days.push(b);
+  }
+  return past30days;
+};
+
 class AuthorizationService {
   static getAuthorizations(dni) {
     return new Promise((resolve, reject) => {
@@ -115,6 +128,38 @@ class AuthorizationService {
         title
       }).then(resolve())
         .catch(e => reject(e));
+    });
+  }
+
+  static getSummarizedInfo() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const authorizedCountPerDay = (await db.raw("select count(*) as status_count, date_trunc('day', updated_at) as date from authorizations where updated_at >= NOW() - interval '30 days' and status = 'APROBADO' group by updated_at order by date")).rows;
+        const rejectedCountPerDay = (await db.raw("select count(*) as status_count, date_trunc('day', updated_at) as date from authorizations where updated_at >= NOW() - interval '30 days' and status = 'RECHAZADO' group by updated_at order by date")).rows;
+        const automaticApprovedCount = (await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'SYSTEM'")).rows[0].count;
+        const manualApprovedCount = (await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'MANUAL'")).rows[0].count;
+
+        const past30days = getPast30Days();
+
+        const authorizedCountForAllLast30Days = past30days.map((day) => {
+          const existingAuthorizedCountForDay = authorizedCountPerDay.find(acpd => acpd.date.toISOString() === day.toISOString());
+          return existingAuthorizedCountForDay || { status_count: '0', date: day };
+        });
+
+        const rejectedCountForAllLast30Days = past30days.map((day) => {
+          const existingRejectedCountForDay = rejectedCountPerDay.find(rcpd => rcpd.date.toISOString() === day.toISOString());
+          return existingRejectedCountForDay || { status_count: '0', date: day };
+        });
+
+        resolve({
+          authorized_count_per_day: authorizedCountForAllLast30Days,
+          rejected_count_per_day: rejectedCountForAllLast30Days,
+          automatic_approved_count: automaticApprovedCount,
+          manual_approved_count: manualApprovedCount
+        });
+      } catch (err) {
+        reject(new Error('Ocurrió un error al obtener los datos sumarizados para autorizaciones'));
+      }
     });
   }
 }
