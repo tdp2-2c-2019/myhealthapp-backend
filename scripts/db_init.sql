@@ -51,8 +51,15 @@ CREATE TABLE IF NOT EXISTS doctors (
     zone VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS authorizations_types(
+    id SERIAL NOT NULL PRIMARY KEY,
+    minimum_plan INTEGER REFERENCES plans(plan),
+    title VARCHAR(255)
+);
+
 CREATE TABLE IF NOT EXISTS authorizations (
     id SERIAL NOT NULL PRIMARY KEY,
+    type INTEGER REFERENCES authorizations_types(id),
     created_by INTEGER REFERENCES users(dni),
     created_for INTEGER REFERENCES users(dni),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -61,6 +68,13 @@ CREATE TABLE IF NOT EXISTS authorizations (
     note VARCHAR(255) DEFAULT '',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     approved_by VARCHAR(255) DEFAULT ''
+);
+
+CREATE TABLE IF NOT EXISTS authorizations_history(
+    authorization_id INTEGER REFERENCES authorizations(id),
+    note VARCHAR(255),
+    status VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS doctors_specializations (
@@ -85,19 +99,6 @@ CREATE TABLE IF NOT EXISTS hospitals_languages (
     hospital_id INTEGER REFERENCES hospitals(id),
     language_id INTEGER REFERENCES languages(id),
     PRIMARY KEY (hospital_id, language_id)
-);
-
-CREATE TABLE IF NOT EXISTS authorizations_history(
-    authorization_id INTEGER REFERENCES authorizations(id),
-    note VARCHAR(255),
-    status VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS authorizations_types(
-    id SERIAL NOT NULL PRIMARY KEY,
-    minimum_plan INTEGER REFERENCES plans(plan),
-    title VARCHAR(255)
 );
 
 INSERT INTO plans("plan", "plan_name") VALUES 
@@ -150,16 +151,14 @@ INSERT INTO hospitals_languages("hospital_id", "language_id") VALUES
 (2, 1),
 (2, 2);
 
-INSERT INTO authorizations("created_by", "created_for", "status", "title") VALUES
-(1, 1, 'PENDING', 'Ortodoncia adultos'),
-(1, 1, 'APPROVED', 'Implante dental'),
-(1, 2, 'PENDING', 'Implante capilar'),
-(2, 2, 'APPROVED', 'Cirugia'),
-(2, 2, 'REJECTED', 'Protesis');
+INSERT INTO authorizations_types ("minimum_plan", "title") VALUES
+(3, 'Implante'),
+(2, 'Operación'),
+(1, 'Rayos');
 
-INSERT INTO authorizations_types
-    ("minimum_plan", "title")
-VALUES
-    (3, 'Implante'),
-    (2, 'Operación'),
-    (1, 'Rayos');
+INSERT INTO authorizations("type", "created_by", "created_for", "status", "title") VALUES
+(1, 1, 1, 'PENDIENTE', 'Ortodoncia adultos'),
+(1, 1, 1, 'APROBADO', 'Implante dental'),
+(2, 1, 2, 'PENDIENTE', 'Implante capilar'),
+(2, 2, 2, 'APROBADO', 'Cirugía'),
+(2, 2, 2, 'RECHAZADO', 'Prótesis');
