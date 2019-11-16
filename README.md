@@ -396,7 +396,8 @@ Response body 200:
     },
     "created_at": "2019-10-24T18:23:38.991Z",
     "status": "PENDING",
-    "title": "Ortodoncia adultos"
+    "title": "Ortodoncia adultos",
+    "type": 1
   }
 ]
 ```
@@ -435,7 +436,8 @@ Response body 200:
 },
 "created_at": "2019-10-24T18:23:38.991Z",
 "status": "PENDING",
-"title": "Ortodoncia adultos"
+"title": "Ortodoncia adultos",
+"type": 1
 }
 ```
 
@@ -448,7 +450,8 @@ Request body:
 {
     "created_by": 1,
     "created_for": 2,
-    "title": "Tomografía"
+    "title": "Tomografía",
+    "type: 1
 }
 ```
 
@@ -463,4 +466,52 @@ Response body 201:
     "title": "Tomografía",
     "note": null
 }
+```
+Response body 201 when auth is approved automatically:
+```json
+{
+    "id": 8,
+    "type": 2,
+    "created_by": 2,
+    "created_for": 2,
+    "created_at": "2019-11-16T13:39:40.777Z",
+    "status": "APROBADO",
+    "title": "Operación de cadera",
+    "note": "Aprobado automáticamente por sistema",
+    "updated_at": "2019-11-16T13:39:40.777Z",
+    "approved_by": "SYSTEM"
+}
+```
+
+#### `GET` /api/authorizations/types
+Gets all authorizations types.
+
+Response body 200:
+```json
+[
+    {
+        "id": 1,
+        "minimum_plan": 3,
+        "title": "Implante"
+    },
+    {
+        "id": 2,
+        "minimum_plan": 2,
+        "title": "Operación"
+    },
+    {
+        "id": 3,
+        "minimum_plan": 1,
+        "title": "Rayos"
+    }
+]
+```
+
+#### `POST` /api/authorizations/types
+Create a new authorization type
+
+Request body:
+```json
+"title": "Tomografía",
+"minimum_plan": 1
 ```
