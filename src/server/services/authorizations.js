@@ -72,14 +72,26 @@ class AuthorizationService {
     });
   }
 
-  static createAuthorization(createdBy, createdFor, title) {
-    return new Promise((resolve, reject) => {
-      db('authorizations').insert({
+  static createAuthorization(createdBy, createdFor, title, type) {
+    return new Promise(async (resolve, reject) => {
+      const destUser = await UserService.getUserByDNI(createdFor);
+      const authType = await AuthorizationService.getTypeByID(type);
+      let auth = {
         created_by: createdBy,
         created_for: createdFor,
         status: 'PENDIENTE',
-        title
-      })
+        title,
+        type
+      };
+      if (authType.minimum_plan <= destUser.plan) {
+        auth = {
+          ...auth,
+          status: 'APROBADO',
+          approved_by: 'SYSTEM',
+          note: 'Aprobado automáticamente por sistema'
+        };
+      }
+      db('authorizations').insert(auth)
         .returning('*')
         .then((rows) => {
           const authorization = rows[0];
@@ -119,6 +131,17 @@ class AuthorizationService {
       db.select().from('authorizations_types')
         .then(rows => resolve(rows))
         .catch(() => reject(new Error('Ocurrió un error al obtener los tipos de autorizaciones')));
+    });
+  }
+
+  static getTypeByID(id) {
+    return new Promise((resolve, reject) => {
+      db('authorizations_types').select().where('id', id)
+        .then((rows) => {
+          if (rows.length === 0) reject(new NotFoundError('Tipo de autorización no encontrada'));
+          else resolve(rows[0]);
+        })
+        .catch(e => reject(e));
     });
   }
 

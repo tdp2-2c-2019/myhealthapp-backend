@@ -19,7 +19,7 @@ router.post('/types', (req, res, next) => {
   if (!req.body.title || !req.body.minimum_plan) {
     next(new ValidationError('Datos insuficientes para crear el tipo de autorización'));
   } else {
-    AuthorizationService.createType(req.body.title)
+    AuthorizationService.createType(req.body.title, req.body.minimum_plan)
       .then(type => res.status(200).send(type))
       .catch(err => next(err));
   }
@@ -46,10 +46,11 @@ router.put('/:id', async (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  if (!req.body.created_by || !req.body.created_for || !req.body.title) {
+  if (!req.body.created_by || !req.body.created_for || !req.body.title || !req.body.type) {
     next(new ValidationError('Datos insuficientes para crear la autorización'));
   } else {
-    AuthorizationService.createAuthorization(req.body.created_by, req.body.created_for, req.body.title)
+    AuthorizationService
+      .createAuthorization(req.body.created_by, req.body.created_for, req.body.title, req.body.type)
       .then(auth => res.status(201).send(auth))
       .catch(err => next(err));
   }
