@@ -1,7 +1,11 @@
 import AuthorizationService from '../services/authorizations';
+import PushNotificationService from '../services/push_notifications';
+import UserService from '../services/users';
 import { ValidationError } from '../errors/errors';
 
 const router = require('express').Router();
+
+const pushNotificationService = new PushNotificationService();
 
 router.get('/', (req, res, next) => {
   AuthorizationService.getAuthorizations()
@@ -36,12 +40,19 @@ router.get('/:id/history', async (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', (req, res, next) => {
   if (!req.body.status) {
     next(new ValidationError('Datos insuficientes para actualizar la autorización, se necesita el estado'));
   } else {
     AuthorizationService.putAuthorizationByID(req.params.id, req.body)
-      .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
+      .then((authorization) => {
+        res.status(200).send(authorization);
+        UserService.getUserByDNI(authorization.created_for)
+          .then((user) => {
+            pushNotificationService.sendPushNotification(user.firebase_token, { data: { MyKey1: `Su solicitud ${authorization.id} ha sido ${authorization.status}` } });
+          })
+          .catch(err => next(err));
+      }).catch(err => next(err));
   }
 });
 
