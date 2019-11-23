@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255),
     blocked BOOLEAN,
     mail VARCHAR(255),
-    token VARCHAR(255)
+    token VARCHAR(255),
+    firebase_token VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS hospitals (
@@ -105,10 +106,10 @@ INSERT INTO plans("plan", "plan_name") VALUES
 (2, 'Plan 2'), 
 (3, 'Plan 3');
 
-INSERT INTO users("dni", "affiliate_id", "plan", "first_name", "last_name", "password", "blocked", "mail", "token") VALUES
-(1, '1234567800', 1, 'Diego', 'Armando', NULL, false, 'diego@mail.com', ''),
-(2, '1234567801', 2, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', ''),
-(38549029, '1111222200', 3, 'Juan Carlos', 'Zapater', NULL, false, 'jzapater@gmail.com', '');
+INSERT INTO users("dni", "affiliate_id", "plan", "first_name", "last_name", "password", "blocked", "mail", "token", "firebase_token") VALUES
+(1, '1234567800', 1, 'Diego', 'Armando', NULL, false, 'diego@mail.com', '', ''),
+(2, '1234567801', 2, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', '', ''),
+(38549029, '1111222200', 3, 'Juan Carlos', 'Zapater', NULL, false, 'jzapater@gmail.com', '', '');
 
 INSERT INTO hospitals("minimum_plan", "name", "mail", "telephone", "address", "lat", "lon", "zone") VALUES
 (1, 'Hospital Alemán', 'hospital_aleman@gmail.com', 48277000, 'Av. Pueyrredón 1640, C1118 AAT, Buenos Aires', -34.5885075, -58.4045567, 'Recoleta'),
