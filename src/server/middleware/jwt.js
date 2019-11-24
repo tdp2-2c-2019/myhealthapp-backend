@@ -28,10 +28,12 @@ export const checkToken = (req, res, next) => {
 
 export class HandlerGenerator {
   static login(req, res, next) {
-    const { dni, password } = req.body;
+    const { dni, password, key } = req.body;
 
     if (!dni || !password) {
       throw new ValidationError('DNI y/o passwords faltantes');
+    } else if (!key) {
+      throw new ValidationError('Token de Firebase faltante');
     }
     UserService.checkCredentials(dni, password)
       .then(() => {
@@ -44,8 +46,16 @@ export class HandlerGenerator {
         res.json({
           message: 'Autenticación exitosa',
           token,
-          dni
+          dni,
+          key
         });
+
+        UserService.getUserByDNI(dni)
+          .then((user) => {
+            UserService.updateUser({ ...user, firebase_token: key })
+              .catch(e => next(e));
+          })
+          .catch(e => next(e));
       })
       .catch(e => next(e));
   }
