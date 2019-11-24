@@ -4,7 +4,10 @@ import UserService from '../services/users';
 import { ValidationError } from '../errors/errors';
 
 const router = require('express').Router();
+const multer = require('multer');
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 const pushNotificationService = new PushNotificationService();
 const sendNotification = (authorization, user) => {
   const status = authorization.status.localeCompare('APROBADO') === 0 ? 'aprobada' : 'rechazada';
@@ -42,6 +45,14 @@ router.get('/:id', async (req, res, next) => {
     .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
 });
 
+router.get('/:id/photo', (req, res, next) => {
+  AuthorizationService.getAuthorizationPhotoByID(req.params.id)
+    .then((photo) => {
+      res.contentType('png');
+      res.send(photo.photo.buffer);
+    });
+});
+
 router.get('/:id/history', async (req, res, next) => {
   AuthorizationService.getAuthorizationHistoryByID(req.params.id)
     .then(history => res.status(200).send(history))
@@ -62,17 +73,19 @@ router.put('/:id', (req, res, next) => {
   }
 });
 
-router.post('/', (req, res, next) => {
-  if (!req.body.created_by || !req.body.created_for || !req.body.title || !req.body.type) {
+router.post('/', upload.single('photo'), (req, res, next) => {
+  if (!req.body.created_by || !req.body.created_for || !req.body.title || !req.body.type || !req.file) {
     next(new ValidationError('Datos insuficientes para crear la autorización'));
   } else {
     AuthorizationService
-      .createAuthorization(req.body.created_by, req.body.created_for, req.body.title, req.body.type)
+      .createAuthorization(req.body.created_by, req.body.created_for, req.body.title, req.body.type, req.file.buffer)
       .then((auth) => {
         res.status(201).send(auth);
         if (auth.status.localeCompare('APROBADO') === 0) {
           UserService.getUserByDNI(auth.created_for)
-            .then(user => sendNotification(auth, user))
+            .then((user) => {
+              if (user.firebase_token.length > 0) sendNotification(auth, user);
+            })
             .catch(err => next(err));
         }
       })

@@ -18,7 +18,7 @@ const getPast30Days = () => {
 class AuthorizationService {
   static getAuthorizations(dni) {
     return new Promise((resolve, reject) => {
-      db.select().from('authorizations')
+      db.select(['id', 'type', 'created_for', 'created_by', 'created_at', 'status', 'title', 'note', 'updated_at', 'approved_by']).from('authorizations')
         .modify((queryBuilder) => {
           if (dni) {
             queryBuilder.where('created_by', dni).orWhere('created_for', dni);
@@ -41,7 +41,7 @@ class AuthorizationService {
 
   static getAuthorizationByID(id) {
     return new Promise((resolve, reject) => {
-      db.select().from('authorizations')
+      db.select(['id', 'type', 'created_for', 'created_by', 'created_at', 'status', 'title', 'note', 'updated_at', 'approved_by']).from('authorizations')
         .where('id', id)
         .then(async (auth) => {
           if (auth.length === 0) reject(new NotFoundError('Autorización no encontrada'));
@@ -55,11 +55,23 @@ class AuthorizationService {
     });
   }
 
+  static getAuthorizationPhotoByID(id) {
+    return new Promise((resolve, reject) => {
+      db.select('photo').where('id', id).from('authorizations')
+        .then((rows) => {
+          if (rows.length === 0) reject(new NotFoundError('Autorización no encontrada'));
+          const photo = rows[0];
+          resolve(photo);
+        })
+        .catch(e => reject(new Error(`Ocurrió un error al obtener la foto de la autorización: ${e}`)));
+    });
+  }
+
   static putAuthorizationByID(id, data) {
     return new Promise((resolve, reject) => {
       db('authorizations')
         .where('id', id)
-        .update({ status: data.status, note: data.note, updated_at: new Date() }, ['*'])
+        .update({ status: data.status, note: data.note, updated_at: new Date() }, ['id'])
         .then(async (auth) => {
           if (auth.length === 0) reject(new NotFoundError('Autorización no encontrada'));
           else {
@@ -72,7 +84,7 @@ class AuthorizationService {
     });
   }
 
-  static createAuthorization(createdBy, createdFor, title, type) {
+  static createAuthorization(createdBy, createdFor, title, type, photo) {
     return new Promise(async (resolve, reject) => {
       const destUser = await UserService.getUserByDNI(createdFor);
       const authType = await AuthorizationService.getTypeByID(type);
@@ -81,7 +93,8 @@ class AuthorizationService {
         created_for: createdFor,
         status: 'PENDIENTE',
         title,
-        type
+        type,
+        photo
       };
       if (authType.minimum_plan <= destUser.plan) {
         auth = {
@@ -92,7 +105,7 @@ class AuthorizationService {
         };
       }
       db('authorizations').insert(auth)
-        .returning('*')
+        .returning(['id', 'type', 'created_for', 'created_by', 'created_at', 'status', 'title', 'note', 'updated_at', 'approved_by'])
         .then((rows) => {
           const authorization = rows[0];
           this.saveAuthorizationChangeOnHistory(authorization.id, '', authorization.status)
@@ -119,7 +132,7 @@ class AuthorizationService {
       db.select().from('authorizations_history')
         .where('authorization_id', id)
         .then((rows) => {
-          if (rows.length == 0) reject(new NotFoundError('Autorización no encontrada'));
+          if (rows.length === 0) reject(new NotFoundError('Autorización no encontrada'));
           else resolve(rows);
         })
         .catch(() => reject(new Error('Ocurrió un error al obtener el historial para la autorización')));
