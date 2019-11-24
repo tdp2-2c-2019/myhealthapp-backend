@@ -46,10 +46,14 @@ router.put('/:id', (req, res, next) => {
   } else {
     AuthorizationService.putAuthorizationByID(req.params.id, req.body)
       .then((authorization) => {
+        res.status(200).send(authorization);
         UserService.getUserByDNI(authorization.created_for.dni)
           .then((user) => {
-            res.status(200).send(authorization);
-            pushNotificationService.sendPushNotification(user.firebase_token, { data: { MyKey1: `Su solicitud ${authorization.id} ha sido ${authorization.status}` } });
+            pushNotificationService
+              .sendPushNotification(
+                user.firebase_token,
+                { data: { MyHealthApp: `Su solicitud ${authorization.id} ha sido ${authorization.status}` } }
+              );
           })
           .catch(err => next(err));
       }).catch(err => next(err));
