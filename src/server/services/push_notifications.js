@@ -14,15 +14,11 @@ class PushNotificationsService {
       credential: admin.credential.cert(googleCredentials),
       databaseURL: 'https://myhealthapp-255602.firebaseio.com'
     });
-    this.messaging = admin.messaging(this.app);
-    this.options = {
-      priority: 'high',
-      timeToLive: 60 * 60 * 24
-    };
+    this.messaging = admin.messaging();
   }
 
   sendPushNotification(registrationToken, payload) {
-    return this.messaging.sendToDevice(registrationToken, payload, this.options);
+    return this.messaging.sendToDevice(registrationToken, payload);
   }
 }
 
