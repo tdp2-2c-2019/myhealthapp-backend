@@ -52,7 +52,7 @@ router.put('/:id', (req, res, next) => {
             pushNotificationService
               .sendPushNotification(
                 user.firebase_token,
-                { data: { title: 'My Health App', body: `Su solicitud ${authorization.id} ha sido ${authorization.status}` } }
+                { notification: { title: 'My Health App', body: `Su solicitud ${authorization.id} ha sido ${authorization.status}` } }
               );
           })
           .catch(err => next(err));
