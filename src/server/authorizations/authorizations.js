@@ -6,6 +6,14 @@ import { ValidationError } from '../errors/errors';
 const router = require('express').Router();
 
 const pushNotificationService = new PushNotificationService();
+const sendNotification = (authorization, user) => {
+  const status = authorization.status.localeCompare('APROBADO') === 0 ? 'aprobada' : 'rechazada';
+  pushNotificationService
+    .sendPushNotification(
+      user.firebase_token,
+      { notification: { title: 'My Health App', body: `Su solicitud número #${authorization.id} ha sido ${status}` } }
+    );
+};
 
 router.get('/', (req, res, next) => {
   AuthorizationService.getAuthorizations()
@@ -48,14 +56,7 @@ router.put('/:id', (req, res, next) => {
       .then((authorization) => {
         res.status(200).send(authorization);
         UserService.getUserByDNI(authorization.created_for.dni)
-          .then((user) => {
-            const status = authorization.status.localeCompare('APROBADO') === 0 ? 'aprobada' : 'rechazada';
-            pushNotificationService
-              .sendPushNotification(
-                user.firebase_token,
-                { notification: { title: 'My Health App', body: `Su solicitud número #${authorization.id} ha sido ${status}` } }
-              );
-          })
+          .then(user => sendNotification(authorization, user))
           .catch(err => next(err));
       }).catch(err => next(err));
   }
@@ -67,7 +68,14 @@ router.post('/', (req, res, next) => {
   } else {
     AuthorizationService
       .createAuthorization(req.body.created_by, req.body.created_for, req.body.title, req.body.type)
-      .then(auth => res.status(201).send(auth))
+      .then((auth) => {
+        res.status(201).send(auth);
+        if (auth.status.localeCompare('APROBADO') === 0) {
+          UserService.getUserByDNI(auth.created_for)
+            .then(user => sendNotification(auth, user))
+            .catch(err => next(err));
+        }
+      })
       .catch(err => next(err));
   }
 });
