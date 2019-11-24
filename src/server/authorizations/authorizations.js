@@ -1,7 +1,19 @@
 import AuthorizationService from '../services/authorizations';
+import PushNotificationService from '../services/push_notifications';
+import UserService from '../services/users';
 import { ValidationError } from '../errors/errors';
 
 const router = require('express').Router();
+
+const pushNotificationService = new PushNotificationService();
+const sendNotification = (authorization, user) => {
+  const status = authorization.status.localeCompare('APROBADO') === 0 ? 'aprobada' : 'rechazada';
+  pushNotificationService
+    .sendPushNotification(
+      user.firebase_token,
+      { notification: { title: 'My Health App', body: `Su solicitud número #${authorization.id} ha sido ${status}` } }
+    );
+};
 
 router.get('/', (req, res, next) => {
   AuthorizationService.getAuthorizations()
@@ -36,12 +48,17 @@ router.get('/:id/history', async (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', (req, res, next) => {
   if (!req.body.status) {
     next(new ValidationError('Datos insuficientes para actualizar la autorización, se necesita el estado'));
   } else {
     AuthorizationService.putAuthorizationByID(req.params.id, req.body)
-      .then(authorization => res.status(200).send(authorization)).catch(err => next(err));
+      .then((authorization) => {
+        res.status(200).send(authorization);
+        UserService.getUserByDNI(authorization.created_for.dni)
+          .then(user => sendNotification(authorization, user))
+          .catch(err => next(err));
+      }).catch(err => next(err));
   }
 });
 
@@ -51,7 +68,14 @@ router.post('/', (req, res, next) => {
   } else {
     AuthorizationService
       .createAuthorization(req.body.created_by, req.body.created_for, req.body.title, req.body.type)
-      .then(auth => res.status(201).send(auth))
+      .then((auth) => {
+        res.status(201).send(auth);
+        if (auth.status.localeCompare('APROBADO') === 0) {
+          UserService.getUserByDNI(auth.created_for)
+            .then(user => sendNotification(auth, user))
+            .catch(err => next(err));
+        }
+      })
       .catch(err => next(err));
   }
 });
