@@ -49,7 +49,7 @@ router.get('/:id/photo', (req, res, next) => {
   AuthorizationService.getAuthorizationPhotoByID(req.params.id)
     .then((photo) => {
       res.contentType('png');
-      res.send(photo.photo.buffer);
+      res.send(photo);
     });
 });
 

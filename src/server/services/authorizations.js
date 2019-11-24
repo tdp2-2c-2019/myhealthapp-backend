@@ -61,7 +61,7 @@ class AuthorizationService {
         .then((rows) => {
           if (rows.length === 0) reject(new NotFoundError('Autorización no encontrada'));
           const photo = rows[0];
-          resolve(photo);
+          resolve(Buffer.from(photo.photo, 'base64'));
         })
         .catch(e => reject(new Error(`Ocurrió un error al obtener la foto de la autorización: ${e}`)));
     });
@@ -88,6 +88,8 @@ class AuthorizationService {
     return new Promise(async (resolve, reject) => {
       const destUser = await UserService.getUserByDNI(createdFor);
       const authType = await AuthorizationService.getTypeByID(type);
+      console.log(photo.toString('base64'));
+
       let auth = {
         created_by: createdBy,
         created_for: createdFor,
