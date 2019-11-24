@@ -14,8 +14,7 @@ class PushNotificationsService {
       credential: admin.credential.cert(googleCredentials),
       databaseURL: 'https://myhealthapp-255602.firebaseio.com'
     });
-    // this.messaging = admin.messaging(this.app);
-    // this.messaging.usePublicVapidKey('BCGG5rb6Rb9ujWRitZeZ7Bl99CaA4o6Hly_PrM4HCpdNdC4-Dqu21zEiYE-tira8dz2f_mbD0tjWAspNeMeaytE');
+    this.messaging = admin.messaging(this.app);
     this.options = {
       priority: 'high',
       timeToLive: 60 * 60 * 24
