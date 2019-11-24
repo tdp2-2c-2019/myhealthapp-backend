@@ -49,10 +49,11 @@ router.put('/:id', (req, res, next) => {
         res.status(200).send(authorization);
         UserService.getUserByDNI(authorization.created_for.dni)
           .then((user) => {
+            const status = authorization.status.localeCompare('APROBADO') === 0 ? 'aprobada' : 'rechazada';
             pushNotificationService
               .sendPushNotification(
                 user.firebase_token,
-                { notification: { title: 'My Health App', body: `Su solicitud ${authorization.id} ha sido ${authorization.status}` } }
+                { notification: { title: 'My Health App', body: `Su solicitud número #${authorization.id} ha sido ${status}` } }
               );
           })
           .catch(err => next(err));
