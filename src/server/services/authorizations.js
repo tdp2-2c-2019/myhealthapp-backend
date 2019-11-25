@@ -60,10 +60,11 @@ class AuthorizationService {
       db.select('photo').where('id', id).from('authorizations')
         .then((rows) => {
           if (rows.length === 0) reject(new NotFoundError('Autorización no encontrada'));
+          else if (!rows[0].photo) reject(new NotFoundError('Foto de la autorización no encontrada'));
           const photo = rows[0];
           resolve(Buffer.from(photo.photo, 'base64'));
         })
-        .catch(e => reject(new Error(`Ocurrió un error al obtener la foto de la autorización: ${e}`)));
+        .catch(() => reject(new Error('Ocurrió un error al obtener la foto de la autorización')));
     });
   }
 
