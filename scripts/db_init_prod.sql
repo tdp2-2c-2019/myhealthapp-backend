@@ -171,9 +171,57 @@ INSERT INTO authorizations_types ("minimum_plan", "title") VALUES
 (2, 'Operación'),
 (1, 'Rayos');
 
-INSERT INTO authorizations("type", "created_by", "created_for", "status", "title") VALUES
+INSERT INTO authorizations("type", "created_by", "created_for", "status", "title", "approved_by") VALUES
 (1, 1, 1, 'PENDIENTE', 'Ortodoncia adultos'),
-(1, 1, 1, 'APROBADO', 'Implante dental'),
+(1, 1, 1, 'APROBADO', 'Implante dental', 'SYSTEM'),
 (2, 1, 2, 'PENDIENTE', 'Implante capilar'),
-(2, 2, 2, 'APROBADO', 'Cirugía'),
+(2, 2, 2, 'APROBADO', 'Cirugía', 'MANUAL'),
 (2, 2, 2, 'RECHAZADO', 'Prótesis');
+
+-- Demo data
+INSERT INTO authorizations
+    ("type", "created_by", "created_for", "status", "title", "approved_by", "updated_at")
+VALUES
+    (2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW());
+
+    (1, 1, 1, 'APROBADO', 'Implante dental', 'SYSTEM', NOW() - INTERVAL '21 day'),
+    (2, 2, 2, 'APROBADO', 'Cirugía', 'MANUAL', NOW() - INTERVAL '21 day'),
+    (2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW() - INTERVAL '25 day'),
+
+(1, 1, 1, 'APROBADO', 'Implante dental', 'SYSTEM', NOW() - INTERVAL '7 day'),
+(2, 2, 2, 'APROBADO', 'Cirugía', 'MANUAL', NOW() - INTERVAL '20 day'),
+(2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW() - INTERVAL '29 day'),
+
+(1, 1, 1, 'APROBADO', 'Implante dental', 'SYSTEM', NOW() - INTERVAL '15 day'),
+(2, 2, 2, 'APROBADO', 'Cirugía', 'MANUAL', NOW() - INTERVAL '13 day'),
+(2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW() - INTERVAL '13 day'),
+
+(1, 1, 1, 'APROBADO', 'Implante dental', 'SYSTEM', NOW() - INTERVAL '10 day'),
+(2, 2, 2, 'APROBADO', 'Cirugía', 'MANUAL', NOW() - INTERVAL '24 day'),
+(2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW() - INTERVAL '27 day'),
+
+(1, 1, 1, 'APROBADO', 'Implante dental', 'SYSTEM', NOW() - INTERVAL '4 day'),
+(2, 2, 2, 'APROBADO', 'Cirugía', 'MANUAL', NOW() - INTERVAL '19 day'),
+(2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW() - INTERVAL '23 day'),
+
+(1, 1, 1, 'APROBADO', 'Implante dental', 'SYSTEM', NOW() - INTERVAL '28 day'),
+(2, 2, 2, 'APROBADO', 'Cirugía', 'MANUAL', NOW() - INTERVAL '11 day'),
+(2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW() - INTERVAL '10 day'),
+
+(1, 1, 1, 'APROBADO', 'Implante dental', 'SYSTEM', NOW() - INTERVAL '16 day'),
+(2, 2, 2, 'APROBADO', 'Cirugía', 'MANUAL', NOW() - INTERVAL '3 day'),
+(2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW() - INTERVAL '25 day');
+
+INSERT INTO users("dni", "affiliate_id", "plan", "first_name", "last_name", "password", "blocked", "mail", "token", "firebase_token") VALUES
+(100, '82038102', 1, 'Diego', 'Armando', NULL, false, 'diego@mail.com', '', ''),
+(101, '203981203', 3, 'Diego', 'Armando', NULL, false, 'diego@mail.com', '', ''),
+(102, '123091823', 3, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', '', ''),
+(103, '0394034', 1, 'Diego', 'Armando', NULL, false, 'diego@mail.com', '', ''),
+(104, '34342342', 2, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', '', ''),
+(105, '9489384', 1, 'Diego', 'Armando', NULL, false, 'diego@mail.com', '', ''),
+(106, '0303456', 3, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', '', ''),
+(107, '02808111', 2, 'Diego', 'Armando', NULL, false, 'diego@mail.com', '', ''),
+(108, '932998948', 2, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', '', ''),
+(109, '338889944', 3, 'Diego', 'Armando', NULL, false, 'diego@mail.com', '', ''),
+(110, '12133300', 1, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', '', ''),
+(111, '232348984', 1, 'Claudio', 'Paul', NULL, false, 'claudio@paul.com', '', '');

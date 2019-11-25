@@ -171,8 +171,8 @@ class AuthorizationService {
   static getSummarizedInfo() {
     return new Promise(async (resolve, reject) => {
       try {
-        const authorizedCountPerDay = (await db.raw("select count(*) as status_count, date_trunc('day', updated_at) as date from authorizations where updated_at >= NOW() - interval '30 days' and status = 'APROBADO' group by updated_at order by date")).rows;
-        const rejectedCountPerDay = (await db.raw("select count(*) as status_count, date_trunc('day', updated_at) as date from authorizations where updated_at >= NOW() - interval '30 days' and status = 'RECHAZADO' group by updated_at order by date")).rows;
+        const authorizedCountPerDay = (await db.raw("select count(*) as status_count, date_trunc('day', updated_at) as date from authorizations where updated_at >= NOW() - interval '30 days' and status = 'APROBADO' group by date order by date")).rows;
+        const rejectedCountPerDay = (await db.raw("select count(*) as status_count, date_trunc('day', updated_at) as date from authorizations where updated_at >= NOW() - interval '30 days' and status = 'RECHAZADO' group by date order by date")).rows;
         const automaticApprovedCount = (await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'SYSTEM'")).rows[0].count;
         const manualApprovedCount = (await db.raw("select count(*) from authorizations where updated_at >= NOW() - interval '30 days' and approved_by = 'MANUAL'")).rows[0].count;
 
