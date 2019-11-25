@@ -182,8 +182,6 @@ INSERT INTO authorizations("type", "created_by", "created_for", "status", "title
 INSERT INTO authorizations
     ("type", "created_by", "created_for", "status", "title", "approved_by", "updated_at")
 VALUES
-    (2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW());
-
     (1, 1, 1, 'APROBADO', 'Implante dental', 'SYSTEM', NOW() - INTERVAL '21 day'),
     (2, 2, 2, 'APROBADO', 'Cirugía', 'MANUAL', NOW() - INTERVAL '21 day'),
     (2, 2, 2, 'RECHAZADO', 'Prótesis', '', NOW() - INTERVAL '25 day'),
