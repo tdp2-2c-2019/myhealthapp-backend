@@ -54,7 +54,8 @@ router.get('/:id/photo', (req, res, next) => {
     .then((photo) => {
       res.contentType(fileType(photo).mime);
       res.send(photo);
-    });
+    })
+    .catch(err => next(err));
 });
 
 router.get('/:id/history', async (req, res, next) => {
