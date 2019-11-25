@@ -59,7 +59,8 @@ class AuthorizationService {
     return new Promise((resolve, reject) => {
       db.select('photo').where('id', id).from('authorizations')
         .then((rows) => {
-          if (rows.length === 0 || !rows[0].photo) reject(new NotFoundError('Foto de autorización no encontrada'));
+          if (rows.length === 0) reject(new NotFoundError('Autorización no encontrada'));
+          else if (!rows[0].photo) reject(new NotFoundError('Foto de la autorización no encontrada'));
           const photo = rows[0];
           resolve(Buffer.from(photo.photo, 'base64'));
         })
