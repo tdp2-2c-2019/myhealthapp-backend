@@ -88,8 +88,6 @@ class AuthorizationService {
     return new Promise(async (resolve, reject) => {
       const destUser = await UserService.getUserByDNI(createdFor);
       const authType = await AuthorizationService.getTypeByID(type);
-      console.log(photo.toString('base64'));
-
       let auth = {
         created_by: createdBy,
         created_for: createdFor,

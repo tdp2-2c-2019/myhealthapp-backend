@@ -5,6 +5,7 @@ import { ValidationError } from '../errors/errors';
 
 const router = require('express').Router();
 const multer = require('multer');
+const fileType = require('file-type');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -48,7 +49,7 @@ router.get('/:id', async (req, res, next) => {
 router.get('/:id/photo', (req, res, next) => {
   AuthorizationService.getAuthorizationPhotoByID(req.params.id)
     .then((photo) => {
-      res.contentType('png');
+      res.contentType(fileType(photo).mime);
       res.send(photo);
     });
 });
