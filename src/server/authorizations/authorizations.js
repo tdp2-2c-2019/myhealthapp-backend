@@ -11,11 +11,14 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const pushNotificationService = new PushNotificationService();
 const sendNotification = (authorization, user) => {
-  const status = authorization.status.localeCompare('APROBADO') === 0 ? 'aprobada' : 'rechazada';
   pushNotificationService
     .sendPushNotification(
-      user.firebase_token,
-      { notification: { title: 'My Health App', body: `Su solicitud número #${authorization.id} ha sido ${status}` } }
+      user.firebase_token, {
+        notification: {
+          title: 'My Health App',
+          body: `Tu solicitud número #${authorization.id} ha sido actualizada.`
+        }
+      }
     );
 };
 
